@@ -1,30 +1,35 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import Harry_Porter from "../assets/Harry_Porter.webp";
-import alchemist from "../assets/alchemist.jpg";
-import Ikigai from "../assets/Ikigai.jpg";
+import { useSelector } from "react-redux";
 
 const FeaturedProduct = () => {
-  const books = [
-    {
-      id: 1,
-      imageURL: Harry_Porter,
-      title: "Harry Porter",
-      price: "$120",
-    },
-    {
-      id: 2,
-      imageURL: alchemist,
-      title: "Alchemist",
-      price: "$78",
-    },
-    {
-      id: 3,
-      imageURL: Ikigai,
-      title: "Ikigai",
-      price: "$68",
-    },
-  ];
+  const books = useSelector((state) => state.books);
+  const featuredBooks = books.filter((book) => book.featured === true);
+
+  const containerRef = useRef(null);
+  const [leftClick, setLeftClick] = useState(true);
+  const [rightClick, setRightClick] = useState(false);
+
+  const scrollToPrevious = () => {
+    const container = containerRef.current;
+    container.scrollTo({
+      left: container.scrollLeft - container.offsetWidth,
+      behavior: "smooth",
+    });
+    setLeftClick(true);
+    setRightClick(false);
+  };
+
+  const scrollToNext = () => {
+    const container = containerRef.current;
+    container.scrollTo({
+      left: container.scrollLeft + container.offsetWidth,
+      behavior: "smooth",
+    });
+    setLeftClick(false);
+    setRightClick(true);
+  };
+
   return (
     <div
       id="featured"
@@ -36,21 +41,38 @@ const FeaturedProduct = () => {
       </h1>
 
       <div className="flex felx-row text-4xl mb-8 gap-12 text-gray-400">
-        <FaChevronLeft className="cursor-pointer text-black" />
-        <FaChevronRight className="cursor-pointer" />
+        <FaChevronLeft
+          className={`cursor-pointer ${
+            leftClick ? "text-black" : "text-gray-400"
+          }`}
+          onClick={scrollToPrevious}
+        />
+        <FaChevronRight
+          className={`cursor-pointer ${
+            rightClick ? "text-black" : "text-gray-400"
+          }`}
+          onClick={scrollToNext}
+        />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-12">
-        {books.map((book) => (
+      <div
+        className="w-3/5 md:w-4/5 grid grid-flow-col gap-12 place-items-center  overscroll-contain overflow-x-hidden"
+        ref={containerRef}
+      >
+        {featuredBooks.map((book) => (
           <div className="w-60 flex flex-col" key={book.id}>
             <img
               className="h-72 w-full rounded-sm shadow-lg"
               src={book.imageURL}
               alt=""
             />
-            <div className="w-full flex flex-row justify-between items-center">
+            <div className="w-full flex flex-row justify-between items-center ">
               <div className="mt-2 flex flex-col">
-                <h1 className="font-semibold text-gray-700">{book.title}</h1>
+                <h1 className="font-semibold text-gray-700">
+                  {book.title.length > 20
+                    ? book.title.slice(0, 17) + "..."
+                    : book.title}
+                </h1>
                 <p className="font-bold">{book.price}</p>
               </div>
               <div className="h-12 w-12 cursor-pointer flex justify-center items-center hover:bg-teal-400 rounded-md shadow-sm transition duration-300 ease-in-out group">
