@@ -16,6 +16,8 @@ React: A JavaScript library for building user interfaces.
 Redux: A state management library for managing application state and data flow.
 Tailwind CSS: A utility-first CSS framework for styling the user interface.
 
+![bookstore](https://github.com/Sagarmikeylevi/BOOKSTORE-FurationTechSolutions/assets/114811573/3dbcb743-caca-459e-87e7-4f0ce9cf1e35)
+
 ## Installation
 To run the Bookstore E-commerce Website locally, follow these steps:
 
@@ -25,4 +27,11 @@ To run the Bookstore E-commerce Website locally, follow these steps:
 
 ## Deployment
 Project already deployed on vercel. Visit: https://bookstore-furation-tech-solutions-3i6psiaur-sagarmikeylevi.vercel.app/
+
+// TODO
+
+1. User authentication 
+2. Filter 
+3. Better interface for cart and order section 
+4. optimization ( maybe using lazy loading )
 
