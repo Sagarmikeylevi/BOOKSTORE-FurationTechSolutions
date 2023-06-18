@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import heroIMG from "../assets/hero.jpg";
 const HeroSection = () => {
@@ -14,10 +15,12 @@ const HeroSection = () => {
           <h1 className="mt-48 text-5xl text-white font-bold mb-8 md:mt-48 lg:text-6xl lg:mt-40">
             Discover New Worlds, One Page At A Time.
           </h1>
-          <button className="h-12 w-32 bg-white flex flex-row justify-evenly items-center font-bold rounded p-2 hover:bg-teal-400 hover:text-white transition duration-300 ease-in-out group">
-            Shop now{" "}
-            <FaArrowRight className="text-sm mt-[5px] text-gray-500 group-hover:text-white" />
-          </button>
+          <Link to="/books?query=Best Sellers">
+            <button className="h-12 w-32 bg-white flex flex-row justify-evenly items-center font-bold rounded p-2 hover:bg-teal-400 hover:text-white transition duration-300 ease-in-out group">
+              Shop now{" "}
+              <FaArrowRight className="text-sm mt-[5px] text-gray-500 group-hover:text-white" />
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import William_Shakespear from "../assets/William_Shakespear.jpg";
 import Agatha_Christie from "../assets/Agatha_Christie.jpg";
 import JK_Rowlingn from "../assets/J.K._Rowling.jpg";
@@ -5,8 +6,8 @@ import Dan_Brown from "../assets/Dan_Brown.jpg";
 import Stephen_King from "../assets/Stephen_King.jpg";
 
 const Author = () => {
-  const Author = [
-    { image: William_Shakespear, name: "William Shakespear" },
+  const Authors = [
+    { image: William_Shakespear, name: "William Shakespeare" },
     { image: Agatha_Christie, name: "Agatha Christie" },
     { image: JK_Rowlingn, name: "J.K. Rowling" },
     { image: Dan_Brown, name: "Dan Brown" },
@@ -22,20 +23,22 @@ const Author = () => {
         <span className="absolute left-[35%] right-0 bottom-[-0.7rem] w-[30%] h-1 bg-gray-400 rounded"></span>
       </h1>
       <div className="w-4/5 mt-16 mb-16 grid grid-flow-col gap-10 place-items-center overflow-x-auto overscroll-contain scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full cursor-pointer">
-        {Author.map((aurtor) => (
-          <div className="w-64 flex flex-col mb-8 ">
-            <img
-              className="h-72 rounded-sm shadow-sm"
-              src={aurtor.image}
-              alt=""
-            />
+        {Authors.map((author) => (
+          <Link to={`/books?query=${author.name}`}>
+            <div className="w-64 flex flex-col mb-8 ">
+              <img
+                className="h-72 rounded-sm shadow-sm"
+                src={author.image}
+                alt=""
+              />
 
-            <div className="w-full h-16 flex justify-center items-center bg-[#e6e6e6] shadow-lg rounded-sm">
-              <h1 className="font-semibold text-gray-700 md:text-lg tracking-wider">
-                {aurtor.name}
-              </h1>
+              <div className="w-full h-16 flex justify-center items-center bg-[#e6e6e6] shadow-lg rounded-sm">
+                <h1 className="font-semibold text-gray-700 md:text-lg tracking-wider">
+                  {author.name}
+                </h1>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

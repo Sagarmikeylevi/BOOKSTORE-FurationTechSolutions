@@ -1,8 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/Root";
 import Home from "./pages/Home";
-import Books from "./pages/Books";
 import Order from "./pages/Order";
+import BooksQuery from "./pages/BooksQuery";
 
 const router = createBrowserRouter([
   {
@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "books", element: <Books /> },
+      { path: "books", element: <BooksQuery /> },
       { path: "order/:bookID", element: <Order /> },
     ],
   },

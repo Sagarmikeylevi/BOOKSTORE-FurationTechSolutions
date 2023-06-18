@@ -67,7 +67,7 @@ const Navigation = () => {
                 <p className={listNameStyle}>Featured</p>
               </li>
             </Link>
-            <Link>
+            <RouterLink to="/books?query=All Books">
               <li className="cursor-pointer group">
                 <img
                   className={listIMGStyle}
@@ -76,7 +76,7 @@ const Navigation = () => {
                 />
                 <p className={listNameStyle}>Books</p>
               </li>
-            </Link>
+            </RouterLink>
             <div className="w-1/5">
               <ul className="flex flex-row justify-between md:justify-evenly">
                 <li className="cursor-pointer">
