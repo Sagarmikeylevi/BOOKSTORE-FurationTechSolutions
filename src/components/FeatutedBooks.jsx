@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
@@ -75,13 +76,15 @@ const FeaturedProduct = () => {
                 </h1>
                 <p className="font-bold">{book.price}</p>
               </div>
-              <div className="h-12 w-12 cursor-pointer flex justify-center items-center hover:bg-teal-400 rounded-md shadow-sm transition duration-300 ease-in-out group">
-                <img
-                  className="h-6 w-6 group-hover:h-8 group-hover:w-8"
-                  src="https://cdn-icons-png.flaticon.com/128/2543/2543369.png"
-                  alt=""
-                />
-              </div>
+              <Link to={`/order/${book.id}`}>
+                <div className="h-12 w-12 cursor-pointer flex justify-center items-center hover:bg-teal-400 rounded-md shadow-sm transition duration-300 ease-in-out group">
+                  <img
+                    className="h-6 w-6 group-hover:h-8 group-hover:w-8"
+                    src="https://cdn-icons-png.flaticon.com/128/2543/2543369.png"
+                    alt=""
+                  />
+                </div>
+              </Link>
             </div>
           </div>
         ))}

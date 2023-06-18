@@ -1,7 +1,7 @@
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
-import book from '../assets/Ikigai.jpg'
+import pic from '../assets/Ikigai.jpg'
 
-const BookOrder = () => {
+const BookOrder = ({book}) => {
   return (
     <div className="pt-20 h-auto w-full mb-16">
       <div className="ml-[5%] p-2 max-w-[20rem]  rounded flex flex-row items-center sm:text-lg before:w-2 before:h-4 before:bg-slate-600 before:mr-2 bg-[#e6e6e6]">
@@ -9,22 +9,26 @@ const BookOrder = () => {
         <FaChevronRight className="mt-1 text-slate-400 mr-2" />
         <p className="font-medium text-slate-500 mr-2 cursor-pointer">Order</p>
         <FaChevronRight className="mt-1 text-slate-400 mr-2" />
-        <p className="font-semibold text-slate-600 cursor-pointer ">Books</p>
+        <p className="font-semibold text-slate-600 cursor-pointer ">Book</p>
       </div>
       <div className="mt-12 mb-16 flex-col">
         <div className="flex flex-row justify-center items-center gap-8 md:gap-12">
           <img
             className="h-[12rem] w-[10rem] rounded md:h-[15rem] md:w-[12rem] lg:h-[18rem] lg:w-[15rem]"
-            src={book}
+            src={book.imageURL}
             alt=""
           />
           <div className="h-[12rem] md:h-[15rem] lg:h-[16rem] lg:mt-[1rem]">
-            <h1 className="font-bold text-lg md:text-xl lg:text-2xl tracking-wide">IKIGAI</h1>
+            <h1 className="font-bold text-lg md:text-xl lg:text-2xl tracking-wide">
+              {book.title}
+            </h1>
 
-            <p className="mt-2 md:mt-4 font-semibold  text-gray-800 md:text-lg lg:text-xl">$78</p>
+            <p className="mt-2 md:mt-4 font-semibold  text-gray-800 md:text-lg lg:text-xl">
+              {book.price}
+            </p>
 
             <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500">
-              Only 1 left <span className="text-sm">in Stocks</span>
+              Only 10 left <span className="text-sm">in Stocks</span>
             </p>
             <div className="mt-2 flex flex-col gap-8">
               <div className="flex flex-row items-center space-x-4">
@@ -48,19 +52,12 @@ const BookOrder = () => {
           </h1>
           <div className="w-4/5  ">
             <h1 className="text-xl mb-4 font-semibold lg:text-2xl">
-              IKIGAI <span className="text-base font-thin lf:text-lg">- Ken Mogi</span>
+              {book.title}{" "}
+              <span className="text-base font-thin lf:text-lg">
+                - {book.author}
+              </span>
             </h1>
-            <p className="text-sm md:text-base lg:text-lg">
-              The Japanese Secret to a Long and Happy Life" by Héctor García a nd
-              Francesc Miralles introduces readers to the concept of ikigai, a
-              deeply ingrained Japanese philosophy that encompasses finding
-              purpose, passion, and fulfillment in life. Through a blend of
-              traditional wisdom and contemporary research, the book guides
-              readers to explore the intersection of their passions, talents,
-              contributions to the world, and financial sustainability,
-              ultimately inspiring them to lead more meaningful and joyful lives
-              by aligning their actions with their ikigai.
-            </p>
+            <p className="text-sm md:text-base lg:text-lg">{book.summary}</p>
           </div>
         </div>
       </div>

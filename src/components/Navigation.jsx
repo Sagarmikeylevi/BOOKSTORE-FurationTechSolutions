@@ -118,7 +118,7 @@ const Navigation = () => {
                 <p className={listNameStyle}>Home</p>
               </li>
             </Link>
-            <Link>
+            <RouterLink to="/books?query=All Books">
               <li className="cursor-pointer group">
                 <img
                   className={listIMGStyle}
@@ -127,7 +127,7 @@ const Navigation = () => {
                 />
                 <p className={listNameStyle}>Books</p>
               </li>
-            </Link>
+            </RouterLink>
             <li className="cursor-pointer">
               <img
                 className="h-4 w-4 sm:h-6 sm:w-6"
