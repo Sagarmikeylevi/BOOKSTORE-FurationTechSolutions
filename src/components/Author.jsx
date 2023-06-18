@@ -13,6 +13,8 @@ const Author = () => {
     { image: Dan_Brown, name: "Dan Brown" },
     { image: Stephen_King, name: "Stephen King" },
   ];
+
+  // Render a list of authors with their images and names as links
   return (
     <div
       id="author"

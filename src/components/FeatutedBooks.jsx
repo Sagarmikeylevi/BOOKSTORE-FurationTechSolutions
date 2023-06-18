@@ -12,6 +12,7 @@ const FeaturedProduct = () => {
   const [rightClick, setRightClick] = useState(false);
 
   const scrollToPrevious = () => {
+    // Scroll to the previous set of featured products
     const container = containerRef.current;
     container.scrollTo({
       left: container.scrollLeft - container.offsetWidth,
@@ -22,6 +23,7 @@ const FeaturedProduct = () => {
   };
 
   const scrollToNext = () => {
+    // Scroll to the next set of featured products
     const container = containerRef.current;
     container.scrollTo({
       left: container.scrollLeft + container.offsetWidth,

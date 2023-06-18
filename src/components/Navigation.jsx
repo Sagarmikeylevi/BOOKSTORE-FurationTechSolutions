@@ -1,18 +1,23 @@
 import { useNavigate, Link as RouterLink, useLocation } from "react-router-dom";
 import { Link, animateScroll as scroll } from "react-scroll";
+
 const Navigation = () => {
+  // CSS classes for the list items
   const listIMGStyle = "h-4 w-4 sm:h-6 sm:w-6 sm:group-hover:hidden md:hidden";
   const listNameStyle =
     "hidden text-lg sm:group-hover:block md:block hover:text-teal-700 hover:border-b-[2px] hover:border-b-teal-100 transition duration-300 ease-in-out group";
 
-  const nevigate = useNavigate();
+  // Hooks for navigation and location
+  const navigate = useNavigate();
   const location = useLocation();
 
+  // Function to redirect to home and scroll to top
   const redirectToHome = () => {
-    nevigate("/");
+    navigate("/");
     scroll.scrollToTop();
   };
 
+  // Function to render the navbar based on the current location
   const renderNavbar = () => {
     if (location.pathname === "/") {
       return (
@@ -152,6 +157,7 @@ const Navigation = () => {
       );
     }
   };
+
   return (
     <nav className="fixed bg-white h-16 w-screen flex flex-row items-center justify-between z-50">
       <RouterLink onClick={redirectToHome}>

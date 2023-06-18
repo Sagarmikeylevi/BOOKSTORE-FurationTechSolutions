@@ -4,10 +4,11 @@ import { cartActions } from "../store/cartSlice";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
 
 const BookOrder = ({ book }) => {
-  const [quantity, setQuantity] = useState(1);
-  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1); // State for managing the quantity of the book
+  const dispatch = useDispatch(); // Redux dispatch function for triggering actions
 
   const handleAddToCart = () => {
+    // Create a new item object with book details and selected quantity
     const newItem = {
       id: book.id,
       title: book.title,
@@ -15,11 +16,14 @@ const BookOrder = ({ book }) => {
       imageURL: book.imageURL,
       quantity: quantity,
     };
+
+    // Dispatch an action to add the item to the cart
     dispatch(cartActions.addItemToCart(newItem));
   };
 
   return (
     <div className="pt-20 h-auto w-full mb-16">
+      {/* Breadcrumb navigation */}
       <div className="ml-[5%] p-2 max-w-[20rem] rounded flex flex-row items-center sm:text-lg before:w-2 before:h-4 before:bg-slate-600 before:mr-2 bg-[#e6e6e6]">
         <p className="font-medium text-slate-500 mr-2 cursor-pointer">Home</p>
         <FaChevronRight className="mt-1 text-slate-400 mr-2" />
@@ -27,25 +31,34 @@ const BookOrder = ({ book }) => {
         <FaChevronRight className="mt-1 text-slate-400 mr-2" />
         <p className="font-semibold text-slate-600 cursor-pointer">Book</p>
       </div>
+
+      {/* Book details and ordering */}
       <div className="mt-12 mb-16 flex-col">
         <div className="flex flex-row justify-center items-center gap-8 md:gap-12">
+          {/* Book image */}
           <img
             className="h-[12rem] w-[10rem] rounded md:h-[15rem] md:w-[12rem] lg:h-[18rem] lg:w-[15rem]"
             src={book.imageURL}
             alt=""
           />
+
           <div className="h-[12rem] md:h-[15rem] lg:h-[16rem] lg:mt-[1rem]">
+            {/* Book title */}
             <h1 className="font-bold text-lg md:text-xl lg:text-2xl tracking-wide">
               {book.title}
             </h1>
 
+            {/* Book price */}
             <p className="mt-2 md:mt-4 font-semibold text-gray-800 md:text-lg lg:text-xl">
               {`$${book.price}`}
             </p>
 
+            {/* Stock availability */}
             <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500">
               Only 10 left <span className="text-sm">in Stocks</span>
             </p>
+
+            {/* Quantity selector */}
             <div className="mt-2 flex flex-col gap-8">
               <div className="flex flex-row items-center space-x-4">
                 <div
@@ -64,6 +77,8 @@ const BookOrder = ({ book }) => {
                   <FaPlus className="cursor-pointer text-gray-500 text-xs" />
                 </div>
               </div>
+
+              {/* Add to cart button */}
               <button
                 className="p-3 bg-black text-white rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base"
                 onClick={handleAddToCart}
@@ -73,10 +88,15 @@ const BookOrder = ({ book }) => {
             </div>
           </div>
         </div>
+
+        {/* Book details */}
         <div className="mt-12 flex flex-col justify-center items-center lg:mt-14">
+          {/* Section title */}
           <h1 className="text-xl font-semibold md:text-2xl lg:text-3xl mb-6 bg-[#e6e6e6] p-4 rounded shadow-lg">
             Details
           </h1>
+
+          {/* Book information */}
           <div className="w-4/5">
             <h1 className="text-xl mb-4 font-semibold lg:text-2xl">
               {book.title}{" "}

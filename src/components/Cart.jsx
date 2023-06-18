@@ -1,10 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { cartActions } from "../store/cartSlice";
 
 const Cart = () => {
+  const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
 
-  let Total = 0; 
+  let Total = 0; // Variable to store the total cost of items in the cart
+
+  const handleRemoveItem = (id) => {
+    // Dispatch an action to remove an item from the cart
+    dispatch(cartActions.removeItemFromCart(id));
+  };
 
   return (
     <div className="pt-20 w-full min-h-[100vh] h-auto grid place-items-center">
@@ -12,7 +19,7 @@ const Cart = () => {
         <div className="flex w-full flex-col gap-2 md:w-4/5 h-full">
           {items.map((item) => {
             item.totalPrice;
-            Total += item.totalPrice; 
+            Total += item.totalPrice;
 
             return (
               <div
@@ -35,8 +42,11 @@ const Cart = () => {
                     {`Number of books: ${item.quantity}`}
                   </span>
                 </div>
-                <button className="text-red-500 focus:outline-none">
-                  Remove
+                <button
+                  className="text-red-500 focus:outline-none"
+                  onClick={() => handleRemoveItem(item.id)}
+                >
+                  Remove by 1
                 </button>
               </div>
             );
@@ -44,8 +54,7 @@ const Cart = () => {
           <div className="bg-white shadow-md rounded-md p-4 mb-4">
             <p className="text-gray-600">Total Cost: ${Total}</p>
             <p className="text-gray-600">Shipment Cost: $20</p>
-            <p className="text-xl font-bold">Grand Total: ${Total + 20}</p>{" "}
-            {/* Display the grandTotal */}
+            <p className="text-xl font-bold">Grand Total: ${Total + 20}</p>
             <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-4 rounded">
               Checkout
             </button>
