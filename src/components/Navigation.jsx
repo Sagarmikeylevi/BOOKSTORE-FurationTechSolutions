@@ -79,13 +79,16 @@ const Navigation = () => {
             </RouterLink>
             <div className="w-1/5">
               <ul className="flex flex-row justify-between md:justify-evenly">
-                <li className="cursor-pointer">
-                  <img
-                    className="h-4 w-4 sm:h-6 sm:w-6"
-                    src="https://cdn-icons-png.flaticon.com/128/833/833314.png"
-                    alt="cart"
-                  />
-                </li>
+                <RouterLink to="cart">
+                  <li className="cursor-pointer">
+                    <img
+                      className="h-4 w-4 sm:h-6 sm:w-6"
+                      src="https://cdn-icons-png.flaticon.com/128/833/833314.png"
+                      alt="cart"
+                    />
+                  </li>
+                </RouterLink>
+
                 <li className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
@@ -128,13 +131,15 @@ const Navigation = () => {
                 <p className={listNameStyle}>Books</p>
               </li>
             </RouterLink>
-            <li className="cursor-pointer">
-              <img
-                className="h-4 w-4 sm:h-6 sm:w-6"
-                src="https://cdn-icons-png.flaticon.com/128/833/833314.png"
-                alt="cart"
-              />
-            </li>
+            <RouterLink to="cart">
+              <li className="cursor-pointer">
+                <img
+                  className="h-4 w-4 sm:h-6 sm:w-6"
+                  src="https://cdn-icons-png.flaticon.com/128/833/833314.png"
+                  alt="cart"
+                />
+              </li>
+            </RouterLink>
             <li className="cursor-pointer">
               <img
                 className="h-4 w-4 sm:h-6 sm:w-6"

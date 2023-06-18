@@ -54,7 +54,7 @@ const ShowBooks = ({ books, pageName }) => {
                     ? book.title.slice(0, 17) + "..."
                     : book.title}
                 </h1>
-                <p className="font-bold md:text-lg">{book.price}</p>
+                <p className="font-bold md:text-lg">{`$${book.price}`}</p>
               </div>
               <Link to={`/order/${book.id}`}>
                 <div className="h-12 w-12 cursor-pointer flex justify-center items-center hover:bg-teal-400 rounded-md shadow-sm transition duration-300 ease-in-out group">
