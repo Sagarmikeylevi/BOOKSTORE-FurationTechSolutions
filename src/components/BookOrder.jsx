@@ -4,6 +4,7 @@ import { cartActions } from "../store/cartSlice";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
 
 const BookOrder = ({ book }) => {
+  const [totalQty, setTotalQty] = useState(9); // state for managig total quantity of the book
   const [quantity, setQuantity] = useState(1); // State for managing the quantity of the book
   const dispatch = useDispatch(); // Redux dispatch function for triggering actions
 
@@ -19,6 +20,18 @@ const BookOrder = ({ book }) => {
 
     // Dispatch an action to add the item to the cart
     dispatch(cartActions.addItemToCart(newItem));
+  };
+
+  const decreaseQtyHandler = () => {
+    setTotalQty(totalQty < 10 && quantity > 1 ? totalQty + 1 : totalQty);
+
+    setQuantity(quantity > 1 ? quantity - 1 : 1);
+  };
+
+  const increaseQtyHandler = () => {
+    setTotalQty(totalQty > 0 ? totalQty - 1 : 0);
+
+    setQuantity(totalQty > 0 ? quantity + 1 : quantity);
   };
 
   return (
@@ -55,7 +68,7 @@ const BookOrder = ({ book }) => {
 
             {/* Stock availability */}
             <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500">
-              Only 10 left <span className="text-sm">in Stocks</span>
+              Only {totalQty} left <span className="text-sm">in Stocks</span>
             </p>
 
             {/* Quantity selector */}
@@ -63,7 +76,7 @@ const BookOrder = ({ book }) => {
               <div className="flex flex-row items-center space-x-4">
                 <div
                   className="p-2 md:p-4 bg-[#e6e6e6] rounded"
-                  onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+                  onClick={decreaseQtyHandler}
                 >
                   <FaMinus className="cursor-pointer text-gray-500 text-xs" />
                 </div>
@@ -72,7 +85,7 @@ const BookOrder = ({ book }) => {
                 </span>
                 <div
                   className="p-2 md:p-4 bg-[#e6e6e6] rounded"
-                  onClick={() => setQuantity(quantity + 1)}
+                  onClick={increaseQtyHandler}
                 >
                   <FaPlus className="cursor-pointer text-gray-500 text-xs" />
                 </div>

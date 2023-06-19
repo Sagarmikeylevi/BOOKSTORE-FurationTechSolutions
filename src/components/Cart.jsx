@@ -150,7 +150,7 @@ const Cart = () => {
             <p className="font-semibold text-gray-700">$ 20</p>
           </div>
 
-          <button className="mt-6 bg-black text-gray-200 p-2 pl-6 pr-6 rounded">
+          <button className="mt-6 bg-black text-gray-200 p-2 pl-6 pr-6 rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base">
             Checkout now
           </button>
         </div>
