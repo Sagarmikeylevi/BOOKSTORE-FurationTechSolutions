@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import William_Shakespear from "../assets/William_Shakespear.jpg";
 import Agatha_Christie from "../assets/Agatha_Christie.jpg";
 import JK_Rowlingn from "../assets/J.K._Rowling.jpg";
@@ -14,19 +16,64 @@ const Author = () => {
     { image: Stephen_King, name: "Stephen King" },
   ];
 
+  const containerRef = useRef(null);
+  const [leftClick, setLeftClick] = useState(true);
+  const [rightClick, setRightClick] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const scrollToPrevious = () => {
+    // Scroll to the previous set of featured products
+    const container = containerRef.current;
+    container.scrollTo({
+      left: container.scrollLeft - container.offsetWidth,
+      behavior: "smooth",
+    });
+    setLeftClick(true);
+    setRightClick(false);
+  };
+
+  const scrollToNext = () => {
+    // Scroll to the next set of featured products
+    const container = containerRef.current;
+    container.scrollTo({
+      left: container.scrollLeft + container.offsetWidth,
+      behavior: "smooth",
+    });
+    setLeftClick(false);
+    setRightClick(true);
+  };
+
   // Render a list of authors with their images and names as links
   return (
     <div
       id="author"
       className="mt-16 p-4 mb-8 flex flex-col justify-center items-center"
     >
-      <h1 className="text-2xl font-semibold sm:text-3xl md:text-4xl relative z-40">
+      <h1 className="mb-10 text-2xl font-semibold sm:text-3xl md:text-4xl relative z-40">
         Top Authors
         <span className="absolute left-[35%] right-0 bottom-[-0.7rem] w-[30%] h-1 bg-gray-400 rounded"></span>
       </h1>
-      <div className="w-4/5 mt-16 mb-16 grid grid-flow-col gap-10 place-items-center overflow-x-auto overscroll-contain scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full cursor-pointer">
+      <div className="flex felx-row text-4xl mb-10 gap-12 text-gray-400">
+        <FaChevronLeft
+          className={`cursor-pointer ${
+            leftClick ? "text-black" : "text-gray-400"
+          }`}
+          onClick={scrollToPrevious}
+        />
+        <FaChevronRight
+          className={`cursor-pointer ${
+            rightClick ? "text-black" : "text-gray-400"
+          }`}
+          onClick={scrollToNext}
+        />
+      </div>
+      <div
+        className="w-3/5 md:w-4/5 grid grid-flow-col gap-12 place-items-center  overscroll-contain overflow-x-hidden"
+        ref={containerRef}
+      >
         {Authors.map((author) => (
-          <Link to={`/books?query=${author.name}`}>
+          <Link to={`/books?query=${author.name}`} key={author.name}>
             <div className="w-64 flex flex-col mb-8 ">
               <img
                 className="h-72 rounded-sm shadow-sm"
@@ -46,5 +93,6 @@ const Author = () => {
     </div>
   );
 };
+
 
 export default Author;

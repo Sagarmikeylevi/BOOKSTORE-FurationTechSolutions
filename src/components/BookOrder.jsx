@@ -13,7 +13,7 @@ const BookOrder = ({ book }) => {
     const newItem = {
       id: book.id,
       title: book.title,
-      price: 70,
+      price: book.price,
       imageURL: book.imageURL,
       quantity: quantity,
     };
@@ -63,7 +63,7 @@ const BookOrder = ({ book }) => {
 
             {/* Book price */}
             <p className="mt-2 md:mt-4 font-semibold text-gray-800 md:text-lg lg:text-xl">
-              {`$${book.price}`}
+              {`$ ${book.price}`}
             </p>
 
             {/* Stock availability */}

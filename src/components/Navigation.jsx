@@ -1,5 +1,5 @@
 import { useNavigate, Link as RouterLink, useLocation } from "react-router-dom";
-import { Link, animateScroll as scroll } from "react-scroll";
+import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 
 const Navigation = () => {
   // CSS classes for the list items
@@ -23,12 +23,13 @@ const Navigation = () => {
       return (
         <div className="h-full w-4/5">
           <ul className="flex flex-row h-full w-full justify-evenly items-center md:justify-between">
-            <Link
+            <ScrollLink
               onClick={redirectToHome}
               spy={true}
               smooth={true}
               offset={-70}
               duration={500}
+              to="home"
             >
               <li className="cursor-pointer group">
                 <img
@@ -38,9 +39,9 @@ const Navigation = () => {
                 />
                 <p className={listNameStyle}>Home</p>
               </li>
-            </Link>
+            </ScrollLink>
 
-            <Link
+            <ScrollLink
               to="author"
               spy={true}
               smooth={true}
@@ -55,8 +56,9 @@ const Navigation = () => {
                 />
                 <p className={listNameStyle}>Author</p>
               </li>
-            </Link>
-            <Link
+            </ScrollLink>
+
+            <ScrollLink
               to="featured"
               spy={true}
               smooth={true}
@@ -71,7 +73,8 @@ const Navigation = () => {
                 />
                 <p className={listNameStyle}>Featured</p>
               </li>
-            </Link>
+            </ScrollLink>
+
             <RouterLink to="/books?query=All Books">
               <li className="cursor-pointer group">
                 <img
@@ -82,6 +85,7 @@ const Navigation = () => {
                 <p className={listNameStyle}>Books</p>
               </li>
             </RouterLink>
+
             <div className="w-1/5">
               <ul className="flex flex-row justify-between md:justify-evenly">
                 <RouterLink to="cart">
@@ -110,12 +114,13 @@ const Navigation = () => {
       return (
         <div className="h-full w-4/5">
           <ul className="flex flex-row h-full w-full justify-evenly items-center">
-            <Link
+            <ScrollLink
               onClick={redirectToHome}
               spy={true}
               smooth={true}
               offset={-70}
               duration={500}
+              to="home"
             >
               <li className="cursor-pointer group">
                 <img
@@ -125,7 +130,8 @@ const Navigation = () => {
                 />
                 <p className={listNameStyle}>Home</p>
               </li>
-            </Link>
+            </ScrollLink>
+
             <RouterLink to="/books?query=All Books">
               <li className="cursor-pointer group">
                 <img
@@ -136,6 +142,7 @@ const Navigation = () => {
                 <p className={listNameStyle}>Books</p>
               </li>
             </RouterLink>
+
             <RouterLink to="cart">
               <li className="cursor-pointer">
                 <img
@@ -145,6 +152,7 @@ const Navigation = () => {
                 />
               </li>
             </RouterLink>
+
             <li className="cursor-pointer">
               <img
                 className="h-4 w-4 sm:h-6 sm:w-6"
