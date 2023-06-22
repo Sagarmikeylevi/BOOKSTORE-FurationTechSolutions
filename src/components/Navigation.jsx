@@ -59,6 +59,23 @@ const Navigation = () => {
             </ScrollLink>
 
             <ScrollLink
+              to="categories"
+              spy={true}
+              smooth={true}
+              offset={-70}
+              duration={500}
+            >
+              <li className="cursor-pointer group">
+                <img
+                  className={listIMGStyle}
+                  src="https://cdn-icons-png.flaticon.com/128/4059/4059951.png"
+                  alt="featured products"
+                />
+                <p className={listNameStyle}>Categories</p>
+              </li>
+            </ScrollLink>
+
+            <ScrollLink
               to="featured"
               spy={true}
               smooth={true}
@@ -74,17 +91,6 @@ const Navigation = () => {
                 <p className={listNameStyle}>Featured</p>
               </li>
             </ScrollLink>
-
-            <RouterLink to="/books?query=All Books">
-              <li className="cursor-pointer group">
-                <img
-                  className={listIMGStyle}
-                  src="https://cdn-icons-png.flaticon.com/128/2702/2702134.png"
-                  alt="books"
-                />
-                <p className={listNameStyle}>Books</p>
-              </li>
-            </RouterLink>
 
             <div className="w-1/5">
               <ul className="flex flex-row justify-between md:justify-evenly">
