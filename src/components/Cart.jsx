@@ -1,6 +1,5 @@
 import React from "react";
 import { FaChevronRight, FaCheck, FaPlus, FaMinus } from "react-icons/fa";
-import alchemist from "../assets/alchemist.jpg";
 import { useSelector } from "react-redux";
 
 const Cart = () => {

@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useSelector } from "react-redux";
 
-const FeaturedProduct = () => {
-  const books = useSelector((state) => state.books);
+const FeaturedProduct = ({ books }) => {
   const featuredBooks = books.filter((book) => book.featured === true);
+
+  console.log(featuredBooks);
 
   const containerRef = useRef(null);
   const [leftClick, setLeftClick] = useState(true);
@@ -63,10 +63,10 @@ const FeaturedProduct = () => {
         ref={containerRef}
       >
         {featuredBooks.map((book) => (
-          <div className="w-60 flex flex-col" key={book.id}>
+          <div className="w-60 flex flex-col" key={book._id}>
             <img
               className="h-72 w-full rounded-sm shadow-lg"
-              src={book.imageURL}
+              src={`http://localhost:8000/uploads/images/${book.imageURL}`}
               alt=""
             />
             <div className="w-full flex flex-row justify-between items-center ">
@@ -76,9 +76,9 @@ const FeaturedProduct = () => {
                     ? book.title.slice(0, 17) + "..."
                     : book.title}
                 </h1>
-                <p className="font-bold">{`$${book.price}`}</p>
+                <p className="font-bold">{`$ ${book.price}`}</p>
               </div>
-              <Link to={`/order/${book.id}`}>
+              <Link to={`/order/${book._id}`}>
                 <div className="h-12 w-12 cursor-pointer flex justify-center items-center hover:bg-teal-400 rounded-md shadow-sm transition duration-300 ease-in-out group">
                   <img
                     className="h-6 w-6 group-hover:h-8 group-hover:w-8"
