@@ -5,8 +5,6 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 const FeaturedProduct = ({ books }) => {
   const featuredBooks = books.filter((book) => book.featured === true);
 
-  console.log(featuredBooks);
-
   const containerRef = useRef(null);
   const [leftClick, setLeftClick] = useState(true);
   const [rightClick, setRightClick] = useState(false);
