@@ -1,25 +1,30 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { cartActions } from "../store/cartSlice";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
+import axios from "axios";
 
 const BookOrder = ({ book }) => {
-  const [totalQty, setTotalQty] = useState(9); // state for managig total quantity of the book
+  const [totalQty, setTotalQty] = useState(book.totalQty - 1); // state for managig total quantity of the book
   const [quantity, setQuantity] = useState(1); // State for managing the quantity of the book
-  const dispatch = useDispatch(); // Redux dispatch function for triggering actions
+
+  const postData = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/cart/addBooks",
+        data
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleAddToCart = () => {
     // Create a new item object with book details and selected quantity
     const newItem = {
-      id: book.id,
-      title: book.title,
-      price: book.price,
-      imageURL: book.imageURL,
-      quantity: quantity,
+      bookId: book._id,
+      qty: quantity,
     };
-
-    // Dispatch an action to add the item to the cart
-    dispatch(cartActions.addItemToCart(newItem));
+    postData(newItem);
   };
 
   const decreaseQtyHandler = () => {
