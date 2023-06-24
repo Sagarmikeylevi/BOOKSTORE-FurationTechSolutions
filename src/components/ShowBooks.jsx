@@ -47,11 +47,11 @@ const ShowBooks = ({ books, pageName }) => {
       {/* Display filtered books */}
       <div className="w-4/5 mt-16 mb-16 grid grid-flow-col gap-10 place-items-center overflow-x-auto overscroll-contain scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full cursor-pointer">
         {filteredBooks.map((book) => (
-          <div className="w-64 flex flex-col mb-8" key={book.id}>
+          <div className="w-64 flex flex-col mb-8" key={book._id}>
             {/* Book image */}
             <img
               className="h-72 w-full rounded-sm shadow-sm"
-              src={book.imageURL}
+              src={`http://localhost:8000/uploads/images/${book.imageURL}`}
               alt=""
             />
             <div className="w-full flex flex-row justify-between items-center">
@@ -66,7 +66,7 @@ const ShowBooks = ({ books, pageName }) => {
                 <p className="font-bold md:text-lg">{`$${book.price}`}</p>
               </div>
               {/* Link to order page */}
-              <Link to={`/order/${book.id}`}>
+              <Link to={`/order/${book._id}`}>
                 <div className="h-12 w-12 cursor-pointer flex justify-center items-center hover:bg-teal-400 rounded-md shadow-sm transition duration-300 ease-in-out group">
                   <img
                     className="h-6 w-6 group-hover:h-8 group-hover:w-8"

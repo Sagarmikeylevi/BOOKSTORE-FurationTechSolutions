@@ -1,14 +1,30 @@
-import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import ShowBooks from "../components/ShowBooks";
+import useFetchData from "../hooks/useFetchData";
 
 const BooksQuery = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
-  let filteredBooks = useSelector((state) => state.books);
 
-  let pageName = "Books"; // Declare pageName using the let keyword
+  const { data, isLoading, error } = useFetchData(
+    "http://localhost:8000/api/book/getbooks"
+  );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  let filteredBooks = data.data.books;
+  let pageName = "Books";
 
   if (query === "William Shakespeare") {
     filteredBooks = filteredBooks.filter(
