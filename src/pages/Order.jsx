@@ -1,13 +1,26 @@
 import { useParams } from "react-router-dom";
 import BookOrder from "../components/BookOrder";
-import { useSelector } from "react-redux";
+import useFetchData from "../hooks/useFetchData";
 
 const Order = () => {
   const { bookID } = useParams();
-  const books = useSelector((state) => state.books);
-  const book = books.find((book) => book.id === parseInt(bookID));
-  console.log(book);
-  return <BookOrder book={book} />;
+  const { data, isLoading, error } = useFetchData(
+    `http://localhost:8000/api/book/getbook/${bookID}`
+  );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  if (!data) {
+    return null;
+  }
+  
+  return <BookOrder book={data.data.book} />;
 };
 
 export default Order;

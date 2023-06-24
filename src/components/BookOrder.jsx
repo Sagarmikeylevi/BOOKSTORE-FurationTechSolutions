@@ -51,7 +51,7 @@ const BookOrder = ({ book }) => {
           {/* Book image */}
           <img
             className="h-[12rem] w-[10rem] rounded md:h-[15rem] md:w-[12rem] lg:h-[18rem] lg:w-[15rem]"
-            src={book.imageURL}
+            src={`http://localhost:8000/uploads/images/${book.imageURL}`}
             alt=""
           />
 

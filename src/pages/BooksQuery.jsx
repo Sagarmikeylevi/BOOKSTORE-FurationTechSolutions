@@ -53,7 +53,6 @@ const BooksQuery = () => {
     filteredBooks = filteredBooks.filter((book) => book.bestSeller === true);
     pageName = "Best Sellers";
   } else if (genres.includes(query)) {
-    console.log(query);
     filteredBooks = filteredBooks.filter((book) => book.genres.includes(query));
     pageName = query;
   } else {
