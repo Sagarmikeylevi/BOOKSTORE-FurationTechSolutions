@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import adventure from "../assets/Adventure.jpg";
 import self_help from "../assets/Self_help.jpg";
@@ -10,7 +11,7 @@ import Thriller from "../assets/thriller.jpg";
 const BookGenres = () => {
   const items = [
     { label: "Adventure", image: adventure },
-    { label: "Self Help", image: self_help },
+    { label: "Self-Help", image: self_help },
     { label: "Horror", image: Horror },
     { label: "Fantasy", image: Fantasy },
     { label: "Drama", image: Drama },
@@ -48,7 +49,7 @@ const BookGenres = () => {
       className="mt-16 p-4 mb-8 flex flex-col justify-center items-center"
     >
       <h1 className="text-2xl font-semibold sm:text-3xl md:text-4xl mb-12 relative z-40">
-        Categories
+        Genres
         <span className="absolute left-[38%] right-0 bottom-[-1rem] w-[25%] h-1 bg-gray-400 rounded"></span>
       </h1>
 
@@ -80,12 +81,15 @@ const BookGenres = () => {
               backgroundSize: "cover",
             }}
           >
-            <div className="mt-8 h-4/5 flex flex-row justify-center items-end ">
+            <Link
+              to={`/books?query=${item.label}`}
+              className="mt-8 h-4/5 flex flex-row justify-center items-end "
+            >
               <button className="h-12 w-3/5 bg-gray-200 rounded font-bold flex flex-row items-center justify-between p-4 hover:bg-teal-400 hover:text-white transition duration-300 ease-in-out group">
                 {item.label}
                 <FaArrowRight className="text-sm mt-[5px] text-gray-500 group-hover:text-white" />
               </button>
-            </div>
+            </Link>
           </div>
         ))}
       </div>

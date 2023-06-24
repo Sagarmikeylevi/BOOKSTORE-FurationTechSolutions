@@ -26,27 +26,25 @@ const BooksQuery = () => {
   let filteredBooks = data.data.books;
   let pageName = "Books";
 
-  if (query === "William Shakespeare") {
-    filteredBooks = filteredBooks.filter(
-      (book) => book.author === "William Shakespeare"
-    );
-    pageName = "Author";
-  } else if (query === "Agatha Christie") {
-    filteredBooks = filteredBooks.filter(
-      (book) => book.author === "Agatha Christie"
-    );
-    pageName = "Author";
-  } else if (query === "J.K. Rowling") {
-    filteredBooks = filteredBooks.filter(
-      (book) => book.author === "J.K. Rowling"
-    );
-    pageName = "Author";
-  } else if (query === "Dan Brown") {
-    filteredBooks = filteredBooks.filter((book) => book.author === "Dan Brown");
-  } else if (query === "Stephen King") {
-    filteredBooks = filteredBooks.filter(
-      (book) => book.author === "Stephen King"
-    );
+  const authors = [
+    "William Shakespeare",
+    "Agatha Christie",
+    "J.K. Rowling",
+    "Dan Brown",
+    "Stephen King",
+  ];
+
+  const genres = [
+    "Adventure",
+    "Self-Help",
+    "Horror",
+    "Fantasy",
+    "Drama",
+    "Thriller",
+  ];
+
+  if (authors.includes(query)) {
+    filteredBooks = filteredBooks.filter((book) => book.author === query);
     pageName = "Author";
   } else if (query === "All Books") {
     filteredBooks = filteredBooks;
@@ -54,8 +52,12 @@ const BooksQuery = () => {
   } else if (query === "Best Sellers") {
     filteredBooks = filteredBooks.filter((book) => book.bestSeller === true);
     pageName = "Best Sellers";
+  } else if (genres.includes(query)) {
+    console.log(query);
+    filteredBooks = filteredBooks.filter((book) => book.genres.includes(query));
+    pageName = query;
   } else {
-    return <h1>Error</h1>;
+    return <p>Error: "Are you serious right now bro ?"</p>;
   }
 
   return <ShowBooks books={filteredBooks} pageName={pageName} />;

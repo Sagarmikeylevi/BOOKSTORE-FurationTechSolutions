@@ -71,7 +71,7 @@ const Navigation = () => {
                   src="https://cdn-icons-png.flaticon.com/128/4059/4059951.png"
                   alt="featured products"
                 />
-                <p className={listNameStyle}>Categories</p>
+                <p className={listNameStyle}>Genres</p>
               </li>
             </ScrollLink>
 

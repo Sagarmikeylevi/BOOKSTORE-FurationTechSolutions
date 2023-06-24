@@ -63,7 +63,7 @@ const ShowBooks = ({ books, pageName }) => {
                     : book.title}
                 </h1>
                 {/* Book price */}
-                <p className="font-bold md:text-lg">{`$${book.price}`}</p>
+                <p className="font-bold md:text-lg">{`$ ${book.price}`}</p>
               </div>
               {/* Link to order page */}
               <Link to={`/order/${book._id}`}>
