@@ -5,6 +5,8 @@ import Order from "./pages/Order";
 import BooksQuery from "./pages/BooksQuery";
 import OrderCart from "./pages/OrderCart";
 import ErrorPage from "./pages/ErrorPage";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +15,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
+      { path: "register", element: <RegisterPage /> },
+      { path: "login", element: <LoginPage /> },
       { path: "books", element: <BooksQuery /> },
       { path: "order/:bookID", element: <Order /> },
       { path: "cart", element: <OrderCart /> },

@@ -4,6 +4,8 @@ import { useState } from "react";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
+  let totalPrice = 0;
+  const shipment = 20;
 
   const updateData = async (newTotalQty, newQty, id) => {
     try {
@@ -46,6 +48,22 @@ const Cart = ({ items }) => {
     setCartItems(updatedItems);
   };
 
+  const deleteItemHandler = async (itemId) => {
+    const response = await axios.delete(
+      `http://localhost:8000/api/cart/delete/${itemId}`
+    );
+
+    console.log(response.data);
+  };
+
+  // Calculate the total price
+  cartItems.forEach((item) => {
+    totalPrice += item.price * item.Qty;
+  });
+
+  let discount = Math.round(totalPrice * 0.05);
+
+
   return (
     <div className="min-h-[100vh] h-auto pt-20 w-full">
       <div className="w-[90%] ml-[5%]  flex flex-row justify-between items-center">
@@ -62,12 +80,9 @@ const Cart = ({ items }) => {
         <div className="flex flex-col w-full">
           {cartItems.map((item) => (
             <div
-              className="h-36 w-full flex flex-row items-center mb-2 justify-center"
+              className="h-32 w-full flex flex-row items-center mb-4 justify-center"
               key={item._id}
             >
-              <div className="w-6 h-6 border-[2px] border-gray-400 rounded-md grid place-content-center sm:w-8 sm:h-8 cursor-pointer">
-                <FaCheck className="text-sm font-extralight text-gray-600 sm:text-base" />
-              </div>
               <div className="h-full ml-[5%] w-[90%] rounded-md flex flex-row items-center border-[1px] border-gray-400 justify-between sm:w-[80%] pl-4 pr-4 lg:pl-8 lg:pr-8 md:w-[90%] lg:w-[80%] relative">
                 <div className="h-full w-full flex flex-row items-center">
                   <img
@@ -102,7 +117,10 @@ const Cart = ({ items }) => {
                     <FaMinus className="text-gray-600 text-sm" />
                   </div>
                 </div>
-                <button className="absolute top-0 right-0 mt-2 mr-2  text-black font-bold text-xs sm:text-sm">
+                <button
+                  className="absolute top-0 right-0 mt-2 mr-2  text-gray-700 font-bold text-xs sm:text-sm"
+                  onClick={() => deleteItemHandler(item._id)}
+                >
                   X
                 </button>
               </div>
@@ -114,20 +132,24 @@ const Cart = ({ items }) => {
         <div className="w-2/5 h-auto flex flex-col justify-center items-center">
           <div className="w-full flex flex-row justify-between items-center">
             <h1 className="font-semibold text-gray-500">Subtotal</h1>
-            <p className="font-semibold text-gray-600">$ 900</p>
+            <p className="font-semibold text-gray-600">$ {totalPrice}</p>
           </div>
           <div className="mt-2 w-full flex flex-row justify-between items-center">
             <h1 className="font-semibold text-gray-500">Discount</h1>
-            <p className="font-semibold text-gray-600">$ 0</p>
+            <p className="font-semibold text-gray-600">
+              $ {discount}
+            </p>
           </div>
           <div className="mt-2 w-full flex flex-row justify-between items-center">
             <h1 className="font-semibold text-gray-500">Shipment</h1>
-            <p className="font-semibold text-gray-600">$ 20</p>
+            <p className="font-semibold text-gray-600">$ {shipment}</p>
           </div>
           <span className="mt-4 w-full h-[2px] bg-gray-400"></span>
           <div className="mt-2 w-full flex flex-row justify-between items-center">
             <h1 className="font-semibold text-gray-600">Grand Total</h1>
-            <p className="font-semibold text-gray-700">$ 20</p>
+            <p className="font-semibold text-gray-700">
+              $ {totalPrice - discount + shipment}
+            </p>
           </div>
 
           <button className="mt-6 bg-black text-gray-200 p-2 pl-6 pr-6 rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base">

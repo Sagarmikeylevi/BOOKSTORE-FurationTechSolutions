@@ -98,7 +98,7 @@ const BookOrder = ({ book }) => {
 
               {/* Add to cart button */}
               <button
-                className="p-3 bg-black text-white rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base"
+                className="p-3 w-48 bg-black text-white rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base"
                 onClick={handleAddToCart}
               >
                 Add to cart
