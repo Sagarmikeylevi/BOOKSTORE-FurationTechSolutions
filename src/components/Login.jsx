@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Form } from "react-router-dom";
 
 const Login = () => {
   const formLabelStyle = "font-semibold text-gray-600";
@@ -27,25 +27,29 @@ const Login = () => {
           </p>
         </div>
 
-        <form className="flex flex-col gap-2">
+        <Form method="POST" className="flex flex-col gap-2">
           <div className="flex flex-col">
-            <label className={formLabelStyle}>
+            <label htmlFor="email" className={formLabelStyle}>
               Email<span className="text-red-600">*</span>
             </label>
             <input
               className={formInputStyle}
               type="email"
+              id="email"
+              name="email"
               placeholder="Enter your email"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className={formLabelStyle}>
+            <label htmlFor="password" className={formLabelStyle}>
               Password <span className="text-red-600">*</span>
             </label>
             <input
               className={formInputStyle}
               type="password"
+              id="password"
+              name="password"
               placeholder="Enter your password"
             />
           </div>
@@ -56,7 +60,7 @@ const Login = () => {
           >
             Log in
           </button>
-        </form>
+        </Form>
         <p className="text-sm tracking-wider text-gray-600">
           Don't have an account?{" "}
           <Link

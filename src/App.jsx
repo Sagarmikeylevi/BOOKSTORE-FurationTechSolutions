@@ -6,7 +6,7 @@ import BooksQuery from "./pages/BooksQuery";
 import OrderCart from "./pages/OrderCart";
 import ErrorPage from "./pages/ErrorPage";
 import RegisterPage, { action as registerAction } from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
+import LoginPage, { action as loginAction } from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "register", element: <RegisterPage />, action: registerAction },
-      { path: "login", element: <LoginPage /> },
+      { path: "login", element: <LoginPage />, action: loginAction },
       { path: "books", element: <BooksQuery /> },
       { path: "order/:bookID", element: <Order /> },
       { path: "cart", element: <OrderCart /> },

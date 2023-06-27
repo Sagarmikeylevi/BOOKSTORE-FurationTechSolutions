@@ -1,9 +1,14 @@
-import { useState } from "react";
-import { useNavigate, Link as RouterLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  useNavigate,
+  Link as RouterLink,
+  useLocation,
+  redirect,
+} from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
+import { getAuthToken } from "../util/auth";
 
 const Navigation = () => {
-
   const [isLogin, setIsLogin] = useState(false);
   // CSS classes for the list items
   const listIMGStyle = "h-4 w-4 sm:h-6 sm:w-6 sm:group-hover:hidden md:hidden";
@@ -20,6 +25,16 @@ const Navigation = () => {
     scroll.scrollToTop();
   };
 
+  useEffect(() => {
+    const token = getAuthToken();
+    setIsLogin(!!token);
+  }, []);
+
+  const logoutHandler = () => {
+    setIsLogin(false);
+    localStorage.removeItem("token");
+    return redirect("/");
+  };
   // Function to render the navbar based on the current location
   const renderNavbar = () => {
     if (location.pathname === "/") {
@@ -114,16 +129,16 @@ const Navigation = () => {
                   </RouterLink>
 
                   {isLogin && (
-                    <RouterLink className="cursor-pointer">
+                    <li onClick={logoutHandler} className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
                         src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png"
                         alt="user"
                       />
-                    </RouterLink>
+                    </li>
                   )}
                   {!isLogin && (
-                    <RouterLink className="cursor-pointer">
+                    <RouterLink onClick={() => setIsLogin(true)} to="login" className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
                         src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"
@@ -192,16 +207,20 @@ const Navigation = () => {
               </RouterLink>
 
               {isLogin && (
-                <RouterLink className="cursor-pointer">
+                <li onClick={logoutHandler} className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
                     src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png"
                     alt="user"
                   />
-                </RouterLink>
+                </li>
               )}
               {!isLogin && (
-                <RouterLink to="login" className="cursor-pointer">
+                <RouterLink
+                  onClick={() => setIsLogin(true)}
+                  to="login"
+                  className="cursor-pointer"
+                >
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
                     src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"

@@ -1,24 +1,41 @@
+import axios from "axios";
 import Cart from "../components/Cart";
-import useFetchData from "../hooks/useFetchData";
+import { useEffect, useState } from "react";
+import { getAuthToken } from "../util/auth";
 
 const OrderCart = () => {
-  const { data, isLoading, error } = useFetchData(
-    "http://localhost:8000/api/cart/getBooks"
-  );
+  const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      const token = getAuthToken();
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/cart/getBooks",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setCartItems(response.data.data.cartItems);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getCartItems();
+  }, []);
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  return <Cart items={data.data.cartItems} />;
+  return <Cart items={cartItems} />;
 };
 
 export default OrderCart;

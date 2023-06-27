@@ -1,6 +1,7 @@
 import { FaChevronRight, FaCheck, FaPlus, FaMinus } from "react-icons/fa";
 import axios from "axios";
 import { useState } from "react";
+import { getAuthToken } from "../util/auth";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
@@ -9,11 +10,18 @@ const Cart = ({ items }) => {
 
   const updateData = async (newTotalQty, newQty, id) => {
     try {
+      const token = getAuthToken();
       const response = await axios.put(
         `http://localhost:8000/api/cart/update/${id}`,
         {
           totalQty: newTotalQty,
           Qty: newQty,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
         }
       );
 
@@ -49,8 +57,15 @@ const Cart = ({ items }) => {
   };
 
   const deleteItemHandler = async (itemId) => {
+    const token = getAuthToken();
     const response = await axios.delete(
-      `http://localhost:8000/api/cart/delete/${itemId}`
+      `http://localhost:8000/api/cart/delete/${itemId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
     );
 
     console.log(response.data);

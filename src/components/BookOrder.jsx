@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
 import axios from "axios";
+import { getAuthToken } from "../util/auth";
 
 const BookOrder = ({ book }) => {
   const [totalQty, setTotalQty] = useState(book.totalQty - 1); // state for managig total quantity of the book
@@ -8,13 +9,29 @@ const BookOrder = ({ book }) => {
 
   const postData = async (data) => {
     try {
+      const token = getAuthToken();
       const response = await axios.post(
         "http://localhost:8000/api/cart/addBooks",
-        data
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
       );
       console.log(response.data);
     } catch (error) {
-      console.error(error);
+      if (error.response) {
+        console.log(error.response.data); // Response data (if available)
+        console.log(error.response.status); // Response status code
+        console.log(error.response.headers); // Response headers
+      } else if (error.request) {
+        console.log(error.request); // No response received
+      } else {
+        console.log("Error", error.message); // Error setting up the request
+      }
+      console.error(error.config); // Axios request configuration
     }
   };
 

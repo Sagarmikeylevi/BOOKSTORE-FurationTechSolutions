@@ -19,9 +19,7 @@ const Author = () => {
   const containerRef = useRef(null);
   const [leftClick, setLeftClick] = useState(true);
   const [rightClick, setRightClick] = useState(false);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
-
+  
   const scrollToPrevious = () => {
     // Scroll to the previous set of featured products
     const container = containerRef.current;
