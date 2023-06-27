@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Login = () => {
   const formLabelStyle = "font-semibold text-gray-600";
   const formInputStyle =
@@ -57,9 +59,12 @@ const Login = () => {
         </form>
         <p className="text-sm tracking-wider text-gray-600">
           Don't have an account?{" "}
-          <span className="text-base font-semibold text-gray-900 cursor-pointer">
+          <Link
+            to="/register"
+            className="text-base font-semibold text-gray-900 cursor-pointer"
+          >
             Sign up
-          </span>
+          </Link>
         </p>
       </div>
     </div>

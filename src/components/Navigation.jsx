@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useNavigate, Link as RouterLink, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 
 const Navigation = () => {
+
+  const [isLogin, setIsLogin] = useState(false);
   // CSS classes for the list items
   const listIMGStyle = "h-4 w-4 sm:h-6 sm:w-6 sm:group-hover:hidden md:hidden";
   const listNameStyle =
@@ -110,13 +113,24 @@ const Navigation = () => {
                     </li>
                   </RouterLink>
 
-                  <li className="cursor-pointer">
-                    <img
-                      className="h-4 w-4 sm:h-6 sm:w-6"
-                      src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png"
-                      alt="user"
-                    />
-                  </li>
+                  {isLogin && (
+                    <RouterLink className="cursor-pointer">
+                      <img
+                        className="h-4 w-4 sm:h-6 sm:w-6"
+                        src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png"
+                        alt="user"
+                      />
+                    </RouterLink>
+                  )}
+                  {!isLogin && (
+                    <RouterLink className="cursor-pointer">
+                      <img
+                        className="h-4 w-4 sm:h-6 sm:w-6"
+                        src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"
+                        alt="user"
+                      />
+                    </RouterLink>
+                  )}
                 </ul>
               </div>
             </ul>
@@ -177,13 +191,24 @@ const Navigation = () => {
                 </li>
               </RouterLink>
 
-              <li className="cursor-pointer">
-                <img
-                  className="h-4 w-4 sm:h-6 sm:w-6"
-                  src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png"
-                  alt="user"
-                />
-              </li>
+              {isLogin && (
+                <RouterLink className="cursor-pointer">
+                  <img
+                    className="h-4 w-4 sm:h-6 sm:w-6"
+                    src="https://cdn-icons-png.flaticon.com/128/1077/1077063.png"
+                    alt="user"
+                  />
+                </RouterLink>
+              )}
+              {!isLogin && (
+                <RouterLink to="login" className="cursor-pointer">
+                  <img
+                    className="h-4 w-4 sm:h-6 sm:w-6"
+                    src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"
+                    alt="user"
+                  />
+                </RouterLink>
+              )}
             </ul>
           </div>
         </nav>

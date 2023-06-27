@@ -8,7 +8,7 @@ const Footer = () => {
     if (location.pathname === "/login" || location.pathname === "/register") {
       return "";
     } else {
-      retrun(
+      return(
         <footer className="bg-gray-900 text-white py-4">
           <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between px-4">
             <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4">
