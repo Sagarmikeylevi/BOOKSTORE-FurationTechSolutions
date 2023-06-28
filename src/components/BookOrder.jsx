@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
 import axios from "axios";
-import { getAuthToken } from "../util/auth";
+import { getAuthToken, getUser } from "../util/auth";
 
 const BookOrder = ({ book }) => {
   const [totalQty, setTotalQty] = useState(book.totalQty - 1); // state for managig total quantity of the book
@@ -10,8 +10,9 @@ const BookOrder = ({ book }) => {
   const postData = async (data) => {
     try {
       const token = getAuthToken();
+      const user = getUser();
       const response = await axios.post(
-        "http://localhost:8000/api/cart/addBooks",
+        `http://localhost:8000/api/cart/addBooks/${user}`,
         data,
         {
           headers: {

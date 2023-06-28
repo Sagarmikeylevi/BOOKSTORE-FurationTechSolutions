@@ -24,8 +24,10 @@ export const action = async ({ request }) => {
     );
 
     const token = response.data.data.token;
+    const userId = response.data.data.userId;
 
     localStorage.setItem("token", token);
+    localStorage.setItem('user' , userId);
 
     return redirect("/");
   } catch (error) {

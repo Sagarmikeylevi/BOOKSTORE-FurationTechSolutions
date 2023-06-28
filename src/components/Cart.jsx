@@ -1,21 +1,20 @@
 import { FaChevronRight, FaCheck, FaPlus, FaMinus } from "react-icons/fa";
 import axios from "axios";
 import { useState } from "react";
-import { getAuthToken } from "../util/auth";
+import { getAuthToken, getUser } from "../util/auth";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
   let totalPrice = 0;
   const shipment = 20;
 
-  const updateData = async (newTotalQty, newQty, id) => {
+  const updateData = async (mode, id) => {
     try {
       const token = getAuthToken();
       const response = await axios.put(
         `http://localhost:8000/api/cart/update/${id}`,
         {
-          totalQty: newTotalQty,
-          Qty: newQty,
+          mode: mode
         },
         {
           headers: {
@@ -35,7 +34,7 @@ const Cart = ({ items }) => {
       if (item._id === itemId && item.totalQty > 0) {
         const newTotalQty = item.totalQty - 1;
         const newQty = item.Qty + 1;
-        updateData(newTotalQty, newQty, itemId);
+        updateData("plus", itemId);
         return { ...item, totalQty: newTotalQty, Qty: newQty };
       }
       return item;
@@ -48,7 +47,7 @@ const Cart = ({ items }) => {
       if (item._id === itemId && item.Qty > 1) {
         const newTotalQty = item.totalQty + 1;
         const newQty = item.Qty - 1;
-        updateData(newTotalQty, newQty, itemId);
+        updateData("minus", itemId);
         return { ...item, totalQty: newTotalQty, Qty: newQty };
       }
       return item;
@@ -58,8 +57,9 @@ const Cart = ({ items }) => {
 
   const deleteItemHandler = async (itemId) => {
     const token = getAuthToken();
+    const user = getUser();
     const response = await axios.delete(
-      `http://localhost:8000/api/cart/delete/${itemId}`,
+      `http://localhost:8000/api/cart/delete/${itemId}/${user}`,
       {
         headers: {
           "Content-Type": "application/json",
