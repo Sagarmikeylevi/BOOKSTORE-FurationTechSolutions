@@ -1,4 +1,4 @@
-import { FaChevronRight, FaCheck, FaPlus, FaMinus } from "react-icons/fa";
+import { FaChevronRight, FaPlus, FaMinus } from "react-icons/fa";
 import axios from "axios";
 import { useState } from "react";
 import { getAuthToken, getUser } from "../util/auth";
@@ -14,7 +14,7 @@ const Cart = ({ items }) => {
       const response = await axios.put(
         `http://localhost:8000/api/cart/update/${id}`,
         {
-          mode: mode
+          mode: mode,
         },
         {
           headers: {
@@ -77,7 +77,6 @@ const Cart = ({ items }) => {
   });
 
   let discount = Math.round(totalPrice * 0.05);
-
 
   return (
     <div className="min-h-[100vh] h-auto pt-20 w-full">
@@ -151,9 +150,7 @@ const Cart = ({ items }) => {
           </div>
           <div className="mt-2 w-full flex flex-row justify-between items-center">
             <h1 className="font-semibold text-gray-500">Discount</h1>
-            <p className="font-semibold text-gray-600">
-              $ {discount}
-            </p>
+            <p className="font-semibold text-gray-600">$ {discount}</p>
           </div>
           <div className="mt-2 w-full flex flex-row justify-between items-center">
             <h1 className="font-semibold text-gray-500">Shipment</h1>

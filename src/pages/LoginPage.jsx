@@ -1,7 +1,6 @@
 import axios from "axios";
 import Login from "../components/Login";
 import { redirect } from "react-router-dom";
-import { compose } from "@reduxjs/toolkit";
 
 const LoginPage = () => {
   return <Login />;
@@ -25,9 +24,11 @@ export const action = async ({ request }) => {
 
     const token = response.data.data.token;
     const userId = response.data.data.userId;
+    const username = response.data.data.username;
 
     localStorage.setItem("token", token);
-    localStorage.setItem('user' , userId);
+    localStorage.setItem("user", userId);
+    localStorage.setItem("username", username);
 
     return redirect("/");
   } catch (error) {

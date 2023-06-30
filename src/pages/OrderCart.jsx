@@ -2,6 +2,7 @@ import axios from "axios";
 import Cart from "../components/Cart";
 import { useEffect, useState } from "react";
 import { getAuthToken, getUser } from "../util/auth";
+import { CircleLoader } from "react-spinners";
 
 const OrderCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -28,12 +29,15 @@ const OrderCart = () => {
         setIsLoading(false);
       }
     };
-
     getCartItems();
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <CircleLoader color="#4C51BF" loading={true} size={80} />
+      </div>
+    );
   }
 
   return <Cart items={cartItems} />;

@@ -1,15 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useNavigate,
   Link as RouterLink,
   useLocation,
-  redirect,
+  useRouteLoaderData,
 } from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
-import { getAuthToken } from "../util/auth";
 
 const Navigation = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const token = useRouteLoaderData("root");
+  const [isLogin, setIsLogin] = useState(!!token);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const nevigate = useNavigate();
+
+  const loginHandler = () => {
+    setIsLogin(true);
+  };
+
+  const logoutHandler = () => {
+    setIsLoggingOut(true);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("username");
+    setTimeout(() => {
+      setIsLogin(false);
+      setIsLoggingOut(false);
+      nevigate("/");
+    }, 2000);
+  };
+
   // CSS classes for the list items
   const listIMGStyle = "h-4 w-4 sm:h-6 sm:w-6 sm:group-hover:hidden md:hidden";
   const listNameStyle =
@@ -25,16 +44,6 @@ const Navigation = () => {
     scroll.scrollToTop();
   };
 
-  useEffect(() => {
-    const token = getAuthToken();
-    setIsLogin(!!token);
-  }, []);
-
-  const logoutHandler = () => {
-    setIsLogin(false);
-    localStorage.removeItem("token");
-    return redirect("/");
-  };
   // Function to render the navbar based on the current location
   const renderNavbar = () => {
     if (location.pathname === "/") {
@@ -127,8 +136,14 @@ const Navigation = () => {
                       />
                     </li>
                   </RouterLink>
-
-                  {isLogin && (
+                  {isLoggingOut && (
+                    <li className="ml-4 text-lg font-semibold sm:text-xl md:text-2xl lg:ml-8 flex items-center">
+                      <div className="mr-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-gray-900" />
+                      </div>
+                    </li>
+                  )}
+                  {isLogin && !isLoggingOut && (
                     <li onClick={logoutHandler} className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
@@ -138,7 +153,11 @@ const Navigation = () => {
                     </li>
                   )}
                   {!isLogin && (
-                    <RouterLink onClick={() => setIsLogin(true)} to="login" className="cursor-pointer">
+                    <RouterLink
+                      to="login"
+                      onClick={loginHandler}
+                      className="cursor-pointer"
+                    >
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
                         src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"
@@ -205,8 +224,14 @@ const Navigation = () => {
                   />
                 </li>
               </RouterLink>
-
-              {isLogin && (
+              {isLoggingOut && (
+                <li className="ml-4 text-lg font-semibold sm:text-xl md:text-2xl lg:ml-8 flex items-center">
+                  <div className="mr-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-gray-900" />
+                  </div>
+                </li>
+              )}
+              {isLogin && !isLoggingOut && (
                 <li onClick={logoutHandler} className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
