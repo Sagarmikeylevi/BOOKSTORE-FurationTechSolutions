@@ -30,6 +30,10 @@ export const action = async ({ request }) => {
     localStorage.setItem("user", userId);
     localStorage.setItem("username", username);
 
+    const expiration = new Date();
+    expiration.setHours(expiration.getHours() + 1);
+    localStorage.setItem("expiration", expiration.toISOString());
+
     return redirect("/");
   } catch (error) {
     console.log(error);

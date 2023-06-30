@@ -143,7 +143,7 @@ const BookOrder = ({ book }) => {
                 onClick={handleAddToCart}
                 disabled={isAddedToCart || totalQty < 0}
               >
-                {isAddedToCart ? "Adding" : "Add to cart"}
+                {isAddedToCart ? "Adding..." : "Add to cart"}
               </button>
             </div>
           </div>
