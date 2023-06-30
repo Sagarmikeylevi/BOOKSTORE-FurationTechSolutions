@@ -2,16 +2,20 @@ import { useState } from "react";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
 import axios from "axios";
 import { getAuthToken, getUser } from "../util/auth";
+import Error from "./UI/error/Error";
 
 const BookOrder = ({ book }) => {
-  const [totalQty, setTotalQty] = useState(book.totalQty - 1); // state for managig total quantity of the book
-  const [quantity, setQuantity] = useState(1); // State for managing the quantity of the book
+  const [totalQty, setTotalQty] = useState(book.totalQty - 1);
+  const [quantity, setQuantity] = useState(1);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [error, setError] = useState({ isError: false, message: "", code: null });
 
   const postData = async (data) => {
     try {
+      setIsAddedToCart(true);
       const token = getAuthToken();
       const user = getUser();
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:8000/api/cart/addBooks/${user}`,
         data,
         {
@@ -21,20 +25,19 @@ const BookOrder = ({ book }) => {
           },
         }
       );
-      console.log(response.data);
+
+      setError({ isError: false });
     } catch (error) {
-      if (error.response) {
-        console.log(error.response.data); // Response data (if available)
-        console.log(error.response.status); // Response status code
-        console.log(error.response.headers); // Response headers
-      } else if (error.request) {
-        console.log(error.request); // No response received
-      } else {
-        console.log("Error", error.message); // Error setting up the request
-      }
-      console.error(error.config); // Axios request configuration
+      console.log("Cart:", error);
+      setError({ isError: true, message: error.response.data, code: error.response.status });
+    } finally {
+      setIsAddedToCart(false);
     }
   };
+
+  if (error.isError) {
+    return <Error message={error.message} code={error.code} />
+  }
 
   const handleAddToCart = () => {
     // Create a new item object with book details and selected quantity
@@ -90,15 +93,26 @@ const BookOrder = ({ book }) => {
             </p>
 
             {/* Stock availability */}
-            <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500">
-              Only {totalQty} left <span className="text-sm">in Stocks</span>
-            </p>
+            {totalQty < 0 && (
+              <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-red-600">
+                Out of Stocks
+              </p>
+            )}
+            {totalQty >= 0 && (
+              <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500">
+                Only {totalQty} left <span className="text-sm">in Stocks</span>
+              </p>
+            )}
 
             {/* Quantity selector */}
             <div className="mt-2 flex flex-col gap-8">
               <div className="flex flex-row items-center space-x-4">
                 <div
-                  className="p-2 md:p-4 bg-[#e6e6e6] rounded"
+                  className={`p-2 md:p-4 bg-[#e6e6e6] rounded ${
+                    totalQty < 0
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }`}
                   onClick={decreaseQtyHandler}
                 >
                   <FaMinus className="cursor-pointer text-gray-500 text-xs" />
@@ -107,7 +121,11 @@ const BookOrder = ({ book }) => {
                   {quantity}
                 </span>
                 <div
-                  className="p-2 md:p-4 bg-[#e6e6e6] rounded"
+                  className={`p-2 md:p-4 bg-[#e6e6e6] rounded ${
+                    totalQty < 0
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }`}
                   onClick={increaseQtyHandler}
                 >
                   <FaPlus className="cursor-pointer text-gray-500 text-xs" />
@@ -115,11 +133,17 @@ const BookOrder = ({ book }) => {
               </div>
 
               {/* Add to cart button */}
+              {}
               <button
-                className="p-3 w-48 bg-black text-white rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base"
+                className={`p-3 w-48 rounded ${
+                  isAddedToCart ? "bg-teal-500" : "bg-black"
+                } text-white hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out ${
+                  totalQty < 0 ? "cursor-not-allowed" : "cursor-pointer"
+                } text-sm md:text-base`}
                 onClick={handleAddToCart}
+                disabled={isAddedToCart || totalQty < 0}
               >
-                Add to cart
+                {isAddedToCart ? "Adding" : "Add to cart"}
               </button>
             </div>
           </div>
