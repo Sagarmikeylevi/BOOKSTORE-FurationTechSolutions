@@ -9,21 +9,16 @@ import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 
 const Navigation = () => {
   const token = useRouteLoaderData("root");
-  const [isLogin, setIsLogin] = useState(!!token);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const nevigate = useNavigate();
-
-  const loginHandler = () => {
-    setIsLogin(true);
-  };
 
   const logoutHandler = () => {
     setIsLoggingOut(true);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("username");
+    localStorage.removeItem("expiration");
     setTimeout(() => {
-      setIsLogin(false);
       setIsLoggingOut(false);
       nevigate("/");
     }, 2000);
@@ -143,7 +138,7 @@ const Navigation = () => {
                       </div>
                     </li>
                   )}
-                  {isLogin && !isLoggingOut && (
+                  {token && !isLoggingOut && (
                     <li onClick={logoutHandler} className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
@@ -152,12 +147,8 @@ const Navigation = () => {
                       />
                     </li>
                   )}
-                  {!isLogin && (
-                    <RouterLink
-                      to="login"
-                      onClick={loginHandler}
-                      className="cursor-pointer"
-                    >
+                  {!token && (
+                    <RouterLink to="login" className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
                         src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"
@@ -231,7 +222,7 @@ const Navigation = () => {
                   </div>
                 </li>
               )}
-              {isLogin && !isLoggingOut && (
+              {token && !isLoggingOut && (
                 <li onClick={logoutHandler} className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
@@ -240,12 +231,8 @@ const Navigation = () => {
                   />
                 </li>
               )}
-              {!isLogin && (
-                <RouterLink
-                  onClick={() => setIsLogin(true)}
-                  to="login"
-                  className="cursor-pointer"
-                >
+              {!token && (
+                <RouterLink to="login" className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
                     src="https://cdn-icons-png.flaticon.com/128/3596/3596092.png"

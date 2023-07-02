@@ -1,8 +1,13 @@
-import { Link, Form } from "react-router-dom";
+import { Link, Form, useActionData } from "react-router-dom";
+import Error from "./UI/error/Error";
 const Register = () => {
-    const formLabelStyle = "font-semibold text-gray-600";
-    const formInputStyle =
-      "mt-2 pl-4 w-[18rem] h-[2.5rem] rounded border-[1px] border-gray-300 bg-transparent outline-none";
+  const response = useActionData();
+  if (response) {
+    return <Error message={response.data} />;
+  }
+  const formLabelStyle = "font-semibold text-gray-600";
+  const formInputStyle =
+    "mt-2 pl-4 w-[18rem] h-[2.5rem] rounded border-[1px] border-gray-300 bg-transparent outline-none";
 
   return (
     <div className="h-auto mt-8 w-full grid place-content-center mb-8">

@@ -45,25 +45,28 @@ const ShowBooks = ({ books, pageName }) => {
       </div>
 
       {/* Display filtered books */}
-      <div className="w-4/5 mt-16 mb-16 grid grid-flow-col gap-10 place-items-center overflow-x-auto overscroll-contain scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full cursor-pointer">
+      <div className="w-4/5 mt-8 mb-16 grid grid-flow-col gap-10 place-items-center overflow-x-auto overscroll-contain scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full cursor-pointer">
         {filteredBooks.map((book) => (
-          <div className="w-64 flex flex-col mb-8" key={book._id}>
+          <div className="w-52 flex flex-col mb-8" key={book._id}>
             {/* Book image */}
             <img
-              className="h-72 w-full rounded-sm shadow-sm"
+              className="h-60 w-full rounded-sm shadow-sm"
               src={`http://localhost:8000/uploads/images/${book.imageURL}`}
               alt=""
             />
             <div className="w-full flex flex-row justify-between items-center">
               <div className="mt-2 flex flex-col">
                 {/* Book title */}
-                <h1 className="font-semibold text-gray-700 md:text-lg">
+                <h1 className="font-semibold text-gray-700 text-base">
                   {book.title.length > 20
-                    ? book.title.slice(0, 17) + "..."
+                    ? book.title.slice(0, 12) + "..."
                     : book.title}
                 </h1>
                 {/* Book price */}
-                <p className="font-bold md:text-lg">{`$ ${book.price}`}</p>
+                <p className="font-bold text-sm ">
+                  <span className="text-sm font-bold text-gray-600">$</span>
+                  {` ${book.price}`}
+                </p>
               </div>
               {/* Link to order page */}
               <Link to={`/order/${book._id}`}>

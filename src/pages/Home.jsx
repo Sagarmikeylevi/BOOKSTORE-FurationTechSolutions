@@ -1,8 +1,12 @@
-import Author from "../components/Author";
-import FeaturedProduct from "../components/FeatutedBooks";
+import { lazy, Suspense } from "react";
+import { FaSpinner } from "react-icons/fa";
+
+const HeroSection = lazy(() => import("../components/HeroSection"));
+const Author = lazy(() => import("../components/Author"));
+const BookGenres = lazy(() => import("../components/BookGenres"));
+const FeaturedProduct = lazy(() => import("../components/FeatutedBooks"));
 import NewsletterSubscription from "../components/NewsletterSubscription";
-import HeroSection from "../components/HeroSection";
-import BookGenres from "../components/BookGenres";
+
 import useFetchData from "../hooks/useFetchData";
 
 const Home = () => {
@@ -11,7 +15,12 @@ const Home = () => {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin mr-2" />
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (error) {
@@ -24,10 +33,20 @@ const Home = () => {
 
   return (
     <>
-      <HeroSection />
-      <Author />
-      <BookGenres />
-      <FeaturedProduct books={data.data.books} />
+      <Suspense
+        fallback={
+          <div className="pt-24 flex justify-center items-center">
+            <FaSpinner className="animate-spin mr-2" />
+            <p>Loading...</p>
+          </div>
+        }
+      >
+        <HeroSection />
+        <Author />
+        <BookGenres />
+        <FeaturedProduct books={data.data.books} />
+      </Suspense>
+
       <NewsletterSubscription />
     </>
   );

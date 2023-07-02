@@ -8,7 +8,11 @@ const BookOrder = ({ book }) => {
   const [totalQty, setTotalQty] = useState(book.totalQty - 1);
   const [quantity, setQuantity] = useState(1);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const [error, setError] = useState({ isError: false, message: "", code: null });
+  const [error, setError] = useState({
+    isError: false,
+    message: "",
+    code: null,
+  });
 
   const postData = async (data) => {
     try {
@@ -29,14 +33,18 @@ const BookOrder = ({ book }) => {
       setError({ isError: false });
     } catch (error) {
       console.log("Cart:", error);
-      setError({ isError: true, message: error.response.data, code: error.response.status });
+      setError({
+        isError: true,
+        message: error.response.data,
+        code: error.response.status,
+      });
     } finally {
       setIsAddedToCart(false);
     }
   };
 
   if (error.isError) {
-    return <Error message={error.message} code={error.code} />
+    return <Error message={error.message} />;
   }
 
   const handleAddToCart = () => {

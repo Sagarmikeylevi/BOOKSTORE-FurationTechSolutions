@@ -36,6 +36,6 @@ export const action = async ({ request }) => {
 
     return redirect("/");
   } catch (error) {
-    console.log(error);
+    return error.response;
   }
 };

@@ -1,5 +1,7 @@
+import { lazy, Suspense } from "react";
+import { FaSpinner } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import BookOrder from "../components/BookOrder";
+const BookOrder = lazy(() => import("../components/BookOrder"));
 import useFetchData from "../hooks/useFetchData";
 
 const Order = () => {
@@ -9,7 +11,12 @@ const Order = () => {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin mr-2" />
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (error) {
@@ -20,7 +27,18 @@ const Order = () => {
     return null;
   }
   
-  return <BookOrder book={data.data.book} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <FaSpinner className="animate-spin mr-2" />
+          <p>Loading...</p>
+        </div>
+      }
+    >
+      <BookOrder book={data.data.book} />
+    </Suspense>
+  );
 };
 
 export default Order;

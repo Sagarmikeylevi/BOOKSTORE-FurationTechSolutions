@@ -1,5 +1,7 @@
-import { useActionData, useLocation } from "react-router-dom";
-import ShowBooks from "../components/ShowBooks";
+import { lazy, Suspense } from "react";
+import { FaSpinner } from "react-icons/fa"; 
+import { useLocation } from "react-router-dom";
+const ShowBooks = lazy(() => import("../components/ShowBooks") )
 import useFetchData from "../hooks/useFetchData";
 
 const BooksQuery = () => {
@@ -12,7 +14,12 @@ const BooksQuery = () => {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin mr-2" />
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (error) {
@@ -59,7 +66,18 @@ const BooksQuery = () => {
     return <p>Error: "Are you serious right now bro ?"</p>;
   }
 
-  return <ShowBooks books={filteredBooks} pageName={pageName} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="pt-24 flex justify-center items-center">
+          <FaSpinner className="animate-spin mr-2" />
+          <p>Loading...</p>
+        </div>
+      }
+    >
+      <ShowBooks books={filteredBooks} pageName={pageName} />
+    </Suspense>
+  );
 };
 
 export default BooksQuery;

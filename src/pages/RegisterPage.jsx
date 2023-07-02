@@ -9,20 +9,19 @@ const RegisterPage = () => {
 export default RegisterPage;
 
 export const action = async ({ request }) => {
-  const data = await request.formData();
+  try {
+    const data = await request.formData();
 
-  const userData = {
-    name: data.get("name"),
-    email: data.get("email"),
-    password: data.get("password"),
-  };
+    const userData = {
+      name: data.get("name"),
+      email: data.get("email"),
+      password: data.get("password"),
+    };
 
-  const response = await axios.post(
-    "http://localhost:8000/api/user/register",
-    userData
-  );
+    await axios.post("http://localhost:8000/api/user/register", userData);
 
-  console.log(response.data);
-
-  return redirect("/login");
+    return redirect("/login");
+  } catch (error) {
+    return error.response;
+  }
 };

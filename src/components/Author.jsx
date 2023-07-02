@@ -7,19 +7,19 @@ import JK_Rowlingn from "../assets/J.K._Rowling.jpg";
 import Dan_Brown from "../assets/Dan_Brown.jpg";
 import Stephen_King from "../assets/Stephen_King.jpg";
 
-const Author = () => {
-  const Authors = [
-    { image: William_Shakespear, name: "William Shakespeare" },
-    { image: Agatha_Christie, name: "Agatha Christie" },
-    { image: JK_Rowlingn, name: "J.K. Rowling" },
-    { image: Dan_Brown, name: "Dan Brown" },
-    { image: Stephen_King, name: "Stephen King" },
-  ];
+const Authors = [
+  { image: William_Shakespear, name: "William Shakespeare" },
+  { image: Agatha_Christie, name: "Agatha Christie" },
+  { image: JK_Rowlingn, name: "J.K. Rowling" },
+  { image: Dan_Brown, name: "Dan Brown" },
+  { image: Stephen_King, name: "Stephen King" },
+];
 
+const Author = () => {
   const containerRef = useRef(null);
   const [leftClick, setLeftClick] = useState(true);
   const [rightClick, setRightClick] = useState(false);
-  
+
   const scrollToPrevious = () => {
     // Scroll to the previous set of featured products
     const container = containerRef.current;
@@ -91,6 +91,5 @@ const Author = () => {
     </div>
   );
 };
-
 
 export default Author;

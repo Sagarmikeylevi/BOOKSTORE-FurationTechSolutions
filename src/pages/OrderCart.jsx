@@ -1,8 +1,9 @@
+import { lazy, Suspense } from "react";
+import { FaSpinner } from "react-icons/fa";
 import axios from "axios";
-import Cart from "../components/Cart";
+const Cart = lazy(() => import("../components/Cart"));
 import { useEffect, useState } from "react";
 import { getAuthToken, getUser } from "../util/auth";
-import { CircleLoader } from "react-spinners";
 
 const OrderCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -34,13 +35,25 @@ const OrderCart = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <CircleLoader color="#4C51BF" loading={true} size={80} />
+      <div className="flex justify-center items-center h-screen">
+        <FaSpinner className="animate-spin mr-2" />
+        <p>Loading...</p>
       </div>
     );
   }
 
-  return <Cart items={cartItems} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <FaSpinner className="animate-spin mr-2" />
+          <p>Loading...</p>
+        </div>
+      }
+    >
+      <Cart items={cartItems} />
+    </Suspense>
+  );
 };
 
 export default OrderCart;

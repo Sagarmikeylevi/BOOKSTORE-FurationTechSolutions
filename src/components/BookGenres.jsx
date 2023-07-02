@@ -1,23 +1,24 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import adventure from "../assets/Adventure.jpg";
-import self_help from "../assets/Self_help.jpg";
-import Horror from "../assets/horror.jpg";
-import Fantasy from "../assets/fantacy.jpg";
-import Drama from "../assets/drama.jpg";
-import Thriller from "../assets/thriller.jpg";
+
+import adventure from "../assets/Adventure.jpeg";
+import self_help from "../assets/Self_help.jpeg";
+import Horror from "../assets/horror.jpeg";
+import Fantasy from "../assets/fantacy.jpeg";
+import Drama from "../assets/drama.jpeg";
+import Thriller from "../assets/thriller.jpeg";
+
+const items = [
+  { label: "Adventure", image: adventure },
+  { label: "Self-Help", image: self_help },
+  { label: "Horror", image: Horror },
+  { label: "Fantasy", image: Fantasy },
+  { label: "Drama", image: Drama },
+  { label: "Thriller", image: Thriller },
+];
 
 const BookGenres = () => {
-  const items = [
-    { label: "Adventure", image: adventure },
-    { label: "Self-Help", image: self_help },
-    { label: "Horror", image: Horror },
-    { label: "Fantasy", image: Fantasy },
-    { label: "Drama", image: Drama },
-    { label: "Thriller", image: Thriller },
-  ];
-
   const containerRef = useRef(null);
   const [leftClick, setLeftClick] = useState(true);
   const [rightClick, setRightClick] = useState(false);
