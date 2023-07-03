@@ -51,7 +51,7 @@ const ShowBooks = ({ books, pageName }) => {
             {/* Book image */}
             <img
               className="h-60 w-full rounded-sm shadow-sm"
-              src={`http://localhost:8000/uploads/images/${book.imageURL}`}
+              src={`https://bookstore-api12.onrender.com/uploads/images/${book.imageURL}`}
               alt=""
             />
             <div className="w-full flex flex-row justify-between items-center">

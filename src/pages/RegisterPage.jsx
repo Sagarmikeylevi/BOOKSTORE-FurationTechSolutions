@@ -18,7 +18,10 @@ export const action = async ({ request }) => {
       password: data.get("password"),
     };
 
-    await axios.post("http://localhost:8000/api/user/register", userData);
+    await axios.post(
+      "https://bookstore-api12.onrender.com/api/user/register",
+      userData
+    );
 
     return redirect("/login");
   } catch (error) {

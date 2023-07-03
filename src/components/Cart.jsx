@@ -24,7 +24,7 @@ const Cart = ({ items }) => {
     try {
       const token = getAuthToken();
       await axios.put(
-        `http://localhost:8000/api/cart/update/${id}`,
+        `https://bookstore-api12.onrender.com/api/cart/update/${id}`,
         {
           mode: mode,
         },
@@ -71,7 +71,7 @@ const Cart = ({ items }) => {
       const token = getAuthToken();
       const user = getUser();
       await axios.delete(
-        `http://localhost:8000/api/cart/delete/${itemId}/${user}`,
+        `https://bookstore-api12.onrender.com/api/cart/delete/${itemId}/${user}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -95,7 +95,7 @@ const Cart = ({ items }) => {
       const token = getAuthToken();
       const user = getUser();
       const response = await axios.delete(
-        `http://localhost:8000/api/cart/checkout/${user}`,
+        `https://bookstore-api12.onrender.com/api/cart/checkout/${user}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -166,7 +166,7 @@ const Cart = ({ items }) => {
                   <div className="h-full w-full flex flex-row items-center">
                     <img
                       className="h-4/5 w-20 rounded-md sm:w-28"
-                      src={`http://localhost:8000/uploads/images/${item.imageURL}`}
+                      src={`https://bookstore-api12.onrender.com/uploads/images/${item.imageURL}`}
                       alt=""
                     />
                     <div className="ml-2 mt-[-1rem] sm:ml-4">
@@ -212,21 +212,33 @@ const Cart = ({ items }) => {
           <div className="w-2/5 h-auto flex flex-col justify-center items-center">
             <div className="w-full flex flex-row justify-between items-center">
               <h1 className="font-semibold text-gray-500">Subtotal</h1>
-              <p className="font-semibold text-gray-600">$ {totalPrice}</p>
+
+              <p className="font-semibold text-gray-600">
+                <span className="text-gray-500 font-bold">$</span>
+                {` ${totalPrice}`}
+              </p>
             </div>
             <div className="mt-2 w-full flex flex-row justify-between items-center">
               <h1 className="font-semibold text-gray-500">Discount(5%)</h1>
-              <p className="font-semibold text-gray-600">$ {discount}</p>
+              <p className="font-semibold text-gray-600">
+                <span className="text-gray-500 font-bold">-$</span>
+                {` ${discount}`}
+              </p>
             </div>
             <div className="mt-2 w-full flex flex-row justify-between items-center">
               <h1 className="font-semibold text-gray-500">Shipment</h1>
-              <p className="font-semibold text-gray-600">$ {shipment}</p>
+
+              <p className="font-semibold text-gray-600">
+                <span className="text-gray-500 font-bold">$</span>
+                {` ${shipment}`}
+              </p>
             </div>
             <span className="mt-4 w-full h-[2px] bg-gray-400"></span>
             <div className="mt-2 w-full flex flex-row justify-between items-center">
               <h1 className="font-semibold text-gray-600">Grand Total</h1>
               <p className="font-semibold text-gray-700">
-                $ {totalPrice - discount + shipment}
+                <span className="text-gray-500 font-bold">$</span>
+                {totalPrice - discount + shipment}
               </p>
             </div>
 

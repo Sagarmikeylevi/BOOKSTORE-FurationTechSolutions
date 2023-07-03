@@ -42,3 +42,8 @@ export const getUser = () => {
   const user = localStorage.getItem("user");
   return user;
 };
+export const getUserName = () => {
+  const name = localStorage.getItem("username");
+
+  return name;
+}

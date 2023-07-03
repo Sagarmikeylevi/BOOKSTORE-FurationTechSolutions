@@ -11,7 +11,7 @@ import useFetchData from "../hooks/useFetchData";
 
 const Home = () => {
   const { data, isLoading, error } = useFetchData(
-    "http://localhost:8000/api/book/getbooks"
+    "https://bookstore-api12.onrender.com/api/book/getbooks"
   );
 
   if (isLoading) {

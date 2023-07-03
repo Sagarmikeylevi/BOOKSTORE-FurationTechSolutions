@@ -20,7 +20,7 @@ const BookOrder = ({ book }) => {
       const token = getAuthToken();
       const user = getUser();
       await axios.post(
-        `http://localhost:8000/api/cart/addBooks/${user}`,
+        `https://bookstore-api12.onrender.com/api/cart/addBooks/${user}`,
         data,
         {
           headers: {
@@ -85,7 +85,7 @@ const BookOrder = ({ book }) => {
           {/* Book image */}
           <img
             className="h-[12rem] w-[10rem] rounded md:h-[15rem] md:w-[12rem] lg:h-[18rem] lg:w-[15rem]"
-            src={`http://localhost:8000/uploads/images/${book.imageURL}`}
+            src={`https://bookstore-api12.onrender.com/uploads/images/${book.imageURL}`}
             alt=""
           />
 

@@ -64,7 +64,7 @@ const FeaturedProduct = ({ books }) => {
           <div className="w-60 flex flex-col" key={book._id}>
             <img
               className="h-72 w-full rounded-sm shadow-lg"
-              src={`http://localhost:8000/uploads/images/${book.imageURL}`}
+              src={`https://bookstore-api12.onrender.com/uploads/images/${book.imageURL}`}
               alt=""
             />
             <div className="w-full flex flex-row justify-between items-center ">

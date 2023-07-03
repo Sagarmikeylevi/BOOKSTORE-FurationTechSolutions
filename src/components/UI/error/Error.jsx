@@ -2,10 +2,6 @@ import React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 const Error = ({ message }) => {
-  const handleReload = () => {
-    window.location.reload();
-  };
-
   const handleGoBack = () => {
     window.history.back();
   };

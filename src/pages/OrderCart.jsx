@@ -15,7 +15,7 @@ const OrderCart = () => {
       const user = getUser();
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/cart/getBooks/${user}`,
+          `https://bookstore-api12.onrender.com/api/cart/getBooks/${user}`,
           {
             headers: {
               "Content-Type": "application/json",

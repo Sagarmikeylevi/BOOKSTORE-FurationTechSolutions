@@ -7,7 +7,7 @@ import useFetchData from "../hooks/useFetchData";
 const Order = () => {
   const { bookID } = useParams();
   const { data, isLoading, error } = useFetchData(
-    `http://localhost:8000/api/book/getbook/${bookID}`
+    `https://bookstore-api12.onrender.com/api/book/getbook/${bookID}`
   );
 
   if (isLoading) {
