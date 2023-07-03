@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useNavigate,
   Link as RouterLink,
@@ -8,8 +8,17 @@ import {
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 
 const Navigation = () => {
-  const token = useRouteLoaderData("root");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isLogin, setIsLogIn] = useState(false);
+  const token = useRouteLoaderData("root");
+  useEffect(() => {
+    if (token) {
+      setIsLogIn(true);
+    } else {
+      setIsLogIn(false);
+    }
+  }, [token]);
+
   const nevigate = useNavigate();
 
   const logoutHandler = () => {
@@ -19,6 +28,7 @@ const Navigation = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("expiration");
     setTimeout(() => {
+      setIsLogIn(false);
       setIsLoggingOut(false);
       nevigate("/");
     }, 2000);
@@ -138,7 +148,7 @@ const Navigation = () => {
                       </div>
                     </li>
                   )}
-                  {token && !isLoggingOut && (
+                  {isLogin && !isLoggingOut && (
                     <li onClick={logoutHandler} className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
@@ -147,7 +157,7 @@ const Navigation = () => {
                       />
                     </li>
                   )}
-                  {!token && (
+                  {!isLogin && (
                     <RouterLink to="login" className="cursor-pointer">
                       <img
                         className="h-4 w-4 sm:h-6 sm:w-6"
@@ -222,7 +232,7 @@ const Navigation = () => {
                   </div>
                 </li>
               )}
-              {token && !isLoggingOut && (
+              {isLogin && !isLoggingOut && (
                 <li onClick={logoutHandler} className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"
@@ -231,7 +241,7 @@ const Navigation = () => {
                   />
                 </li>
               )}
-              {!token && (
+              {!isLogin && (
                 <RouterLink to="login" className="cursor-pointer">
                   <img
                     className="h-4 w-4 sm:h-6 sm:w-6"

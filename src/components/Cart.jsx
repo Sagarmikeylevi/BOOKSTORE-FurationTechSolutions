@@ -9,17 +9,21 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { getAuthToken, getUser } from "../util/auth";
+import CheckOutMessage from "./UI/success/CheckOutMessage";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
   const [deleting, setDeleting] = useState(false);
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
   let totalPrice = 0;
   const shipment = 20;
 
   const updateData = async (mode, id) => {
     try {
       const token = getAuthToken();
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:8000/api/cart/update/${id}`,
         {
           mode: mode,
@@ -31,8 +35,6 @@ const Cart = ({ items }) => {
           },
         }
       );
-
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +70,7 @@ const Cart = ({ items }) => {
       setDeleting(true);
       const token = getAuthToken();
       const user = getUser();
-      const response = await axios.delete(
+      await axios.delete(
         `http://localhost:8000/api/cart/delete/${itemId}/${user}`,
         {
           headers: {
@@ -87,12 +89,42 @@ const Cart = ({ items }) => {
     }
   };
 
+  const checkOutHandler = async (itemId) => {
+    try {
+      setCheckingOut(true);
+      const token = getAuthToken();
+      const user = getUser();
+      const response = await axios.delete(
+        `http://localhost:8000/api/cart/checkout/${user}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      setCartItems([]);
+      setIsSuccess(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCheckingOut(false);
+    }
+  };
+
   // Calculate the total price
-  cartItems.forEach((item) => {
-    totalPrice += item.price * item.Qty;
-  });
+  if (cartItems !== null) {
+    cartItems.forEach((item) => {
+      totalPrice += item.price * item.Qty;
+    });
+  }
 
   let discount = Math.round(totalPrice * 0.05);
+
+  if (isSuccess) {
+    return <CheckOutMessage />;
+  }
 
   return (
     <div className="min-h-[100vh] h-auto pt-20 w-full">
@@ -198,8 +230,15 @@ const Cart = ({ items }) => {
               </p>
             </div>
 
-            <button className="mt-6 bg-black text-gray-200 p-2 pl-6 pr-6 rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base">
-              Checkout now
+            <button
+              className={`mt-6  ${
+                checkingOut ? "bg-teal-500" : "bg-black"
+              } text-gray-200 p-2 pl-6 pr-6 rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base`}
+              onClick={checkOutHandler}
+              type="submit"
+              disabled={checkingOut}
+            >
+              {checkingOut ? "Checking out..." : "Checkout now"}
             </button>
           </div>
         </div>

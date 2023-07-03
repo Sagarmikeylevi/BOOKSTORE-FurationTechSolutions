@@ -1,5 +1,5 @@
 
-import { Link, Form, useActionData } from "react-router-dom";
+import { Link, Form, useActionData, useNavigation } from "react-router-dom";
 import Error from "./UI/error/Error";
 
 const Login = () => {
@@ -8,6 +8,10 @@ const Login = () => {
   if(response) {
     return <Error message={response.data} />
   }
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   const formLabelStyle = "font-semibold text-gray-600";
   const formInputStyle =
     "mt-2 pl-4 w-[18rem] h-[2.5rem] rounded border-[1px] border-gray-300 bg-transparent outline-none";
@@ -62,10 +66,13 @@ const Login = () => {
           </div>
 
           <button
-            className="w-[18rem] h-[2.5rem] bg-black text-white rounded mt-2 hover:bg-teal-400 transition duration-300 ease-in-out"
+            className={`w-[18rem] h-[2.5rem]  ${
+              isSubmitting ? "bg-teal-400" : "bg-black"
+            } text-white rounded mt-2 hover:bg-teal-400 transition duration-300 ease-in-out`}
             type="submit"
+            disabled={isSubmitting}
           >
-            Log in
+            {isSubmitting ? "Logiing in..." : "Log in"}
           </button>
         </Form>
         <p className="text-sm tracking-wider text-gray-600">

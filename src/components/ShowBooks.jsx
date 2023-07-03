@@ -63,8 +63,8 @@ const ShowBooks = ({ books, pageName }) => {
                     : book.title}
                 </h1>
                 {/* Book price */}
-                <p className="font-bold text-sm ">
-                  <span className="text-sm font-bold text-gray-600">$</span>
+                <p className="font-bold text-base ">
+                  <span className="text-base font-bold text-gray-600 ">$</span>
                   {` ${book.price}`}
                 </p>
               </div>

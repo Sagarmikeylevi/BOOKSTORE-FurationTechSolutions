@@ -25,6 +25,7 @@ const router = createBrowserRouter([
       { path: "books", element: <BooksQuery /> },
       { path: "order/:bookID", element: <Order />, loader: checkAuthLoader },
       { path: "cart", element: <OrderCart />, loader: checkAuthLoader },
+      
     ],
   },
   {
