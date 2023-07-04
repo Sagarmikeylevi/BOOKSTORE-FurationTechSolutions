@@ -2,7 +2,7 @@
 Bookstore E-commerce Website
 
 ## Overview
-This React and Tailwind CSS-powered e-commerce website serves as a virtual bookstore, enabling users to effortlessly browse and purchase books. With an extensive product catalog, advanced search capabilities, and a convenient shopping cart, book enthusiasts can easily find and buy their favorite reads. The website offers a seamless and intuitive interface, ensuring a delightful experience for customers seeking to explore and acquire new books. The data for the website is sourced from a dedicated bookstore API, ensuring up-to-date and accurate book information.
+This is a MERN stack e-commerce website serves as a virtual bookstore, enabling users to effortlessly browse and purchase books. With an extensive product catalog, advanced search capabilities, and a convenient shopping cart. The website offers a seamless and intuitive interface, ensuring a delightful experience for customers seeking to explore and acquire new books. The data for the website is sourced from a dedicated bookstore API, ensuring up-to-date and accurate book information. API GitHub: https://github.com/Sagarmikeylevi/BookStore-API
 
 ## Key Features
 - Product Catalog: Users can browse through a wide range of books available in the bookstore. Each book is displayed with its title, author, price, and an image.
