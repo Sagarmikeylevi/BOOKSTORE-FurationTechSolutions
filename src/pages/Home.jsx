@@ -1,13 +1,20 @@
 import { lazy, Suspense } from "react";
 import { FaSpinner } from "react-icons/fa";
+import useFetchData from "../hooks/useFetchData";
 
-const HeroSection = lazy(() => import("../components/HeroSection"));
+import HeroSection from "../components/HeroSection";
+// Lazy-loaded components
 const Author = lazy(() => import("../components/Author"));
 const BookGenres = lazy(() => import("../components/BookGenres"));
 const FeaturedProduct = lazy(() => import("../components/FeatutedBooks"));
 import NewsletterSubscription from "../components/NewsletterSubscription";
 
-import useFetchData from "../hooks/useFetchData";
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center h-screen">
+    <FaSpinner className="animate-spin mr-2" />
+    <p>Loading...</p>
+  </div>
+);
 
 const Home = () => {
   const { data, isLoading, error } = useFetchData(
@@ -15,12 +22,7 @@ const Home = () => {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <FaSpinner className="animate-spin mr-2" />
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -33,15 +35,8 @@ const Home = () => {
 
   return (
     <>
-      <Suspense
-        fallback={
-          <div className="pt-24 flex justify-center items-center">
-            <FaSpinner className="animate-spin mr-2" />
-            <p>Loading...</p>
-          </div>
-        }
-      >
-        <HeroSection />
+      <HeroSection />
+      <Suspense fallback={<LoadingSpinner />}>
         <Author />
         <BookGenres />
         <FeaturedProduct books={data.data.books} />
