@@ -28,7 +28,7 @@ To run the Bookstore E-commerce Website locally, follow these steps:
 - Start the application with npm start.
 
 ## Deployment
-Project already deployed on vercel. Visit: https://bookery123.netlify.app/
+Project already deployed on vercel. Visit: https://bookstore-furation-tech-solutions.vercel.app/
 
 ## Video
 Visit: https://www.youtube.com/watch?v=1CpN0sqBlN4
