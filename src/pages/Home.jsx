@@ -21,9 +21,9 @@ const Home = () => {
     "https://bookstore-api12.onrender.com/api/book/getbooks"
   );
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  // if (isLoading) {
+  //   return <LoadingSpinner />;
+  // }
 
   if (error) {
     return <p>Error: {error.message}</p>;
