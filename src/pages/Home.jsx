@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { FaSpinner } from "react-icons/fa";
 import useFetchData from "../hooks/useFetchData";
 
-import HeroSection from "../components/HeroSection";
+const HeroSection = lazy(() => import("../components/HeroSection"));
 // Lazy-loaded components
 import Author from "../components/Author";
 import BookGenres from "../components/BookGenres";
@@ -35,7 +35,9 @@ const Home = () => {
 
   return (
     <>
-      <HeroSection />
+      <Suspense fallback={<LoadingSpinner />}>
+        <HeroSection />
+      </Suspense>
 
       <Author />
       <BookGenres />
