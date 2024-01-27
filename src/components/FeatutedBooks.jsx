@@ -1,9 +1,23 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { fetchBooks } from "../http";
+import LoaderSpinner from "./UI/Loader";
+import Error from "./UI/error/Error";
 
-const FeaturedProduct = ({ books }) => {
-  const featuredBooks = books.filter((book) => book.featured === true);
+const FeaturedProduct = () => {
+  const {
+    data: books,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+
+  const featuredBooks = books?.filter((book) => book.featured === true) || [];
 
   const containerRef = useRef(null);
   const [leftClick, setLeftClick] = useState(true);
@@ -30,6 +44,15 @@ const FeaturedProduct = ({ books }) => {
     setLeftClick(false);
     setRightClick(true);
   };
+
+  if (isPending) {
+    return <LoaderSpinner message="Fetching Books..." />;
+  }
+
+  if (isError) {
+    console.log(error);
+    return <Error message="Error Fetching Books" />;
+  }
 
   return (
     <div

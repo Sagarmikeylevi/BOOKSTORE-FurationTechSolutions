@@ -1,59 +1,23 @@
 import { useState } from "react";
 import { FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
-import axios from "axios";
-import { getAuthToken, getUser } from "../util/auth";
+import { useMutation } from "@tanstack/react-query";
+import { postOrder, queryClient } from "../http";
 import Error from "./UI/error/Error";
+import { Link } from "react-router-dom";
 
 const BookOrder = ({ book }) => {
   const [totalQty, setTotalQty] = useState(book.totalQty - 1);
   const [quantity, setQuantity] = useState(1);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const [error, setError] = useState({
-    isError: false,
-    message: "",
-    code: null,
+
+  const { mutate, isPending, isError, error, isSuccess } = useMutation({
+    mutationFn: ({ orderDetails }) => postOrder(orderDetails),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+    },
   });
 
-  const postData = async (data) => {
-    try {
-      setIsAddedToCart(true);
-      const token = getAuthToken();
-      const user = getUser();
-      await axios.post(
-        `https://bookstore-api12.onrender.com/api/cart/addBooks/${user}`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-
-      setError({ isError: false });
-    } catch (error) {
-      console.log("Cart:", error);
-      setError({
-        isError: true,
-        message: error.response.data,
-        code: error.response.status,
-      });
-    } finally {
-      setIsAddedToCart(false);
-    }
-  };
-
-  if (error.isError) {
-    return <Error message={error.message} />;
-  }
-
   const handleAddToCart = () => {
-    // Create a new item object with book details and selected quantity
-    const newItem = {
-      bookId: book._id,
-      qty: quantity,
-    };
-    postData(newItem);
+    mutate({ orderDetails: { bookId: book._id, qty: quantity } });
   };
 
   const decreaseQtyHandler = () => {
@@ -67,6 +31,11 @@ const BookOrder = ({ book }) => {
 
     setQuantity(totalQty > 0 ? quantity + 1 : quantity);
   };
+
+  if (isError) {
+    console.log(error);
+    return <Error message="Add to cart error" />;
+  }
 
   return (
     <div className="pt-20 h-auto w-full mb-16">
@@ -102,58 +71,76 @@ const BookOrder = ({ book }) => {
 
             {/* Stock availability */}
             {totalQty < 0 && (
-              <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-red-600">
+              <p
+                className={`mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-red-600 ${
+                  isSuccess ? "mb-8" : ""
+                }`}
+              >
                 Out of Stocks
               </p>
             )}
             {totalQty >= 0 && (
-              <p className="mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500">
+              <p
+                className={`mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500 ${
+                  isSuccess ? "mb-8" : ""
+                }`}
+              >
                 Only {totalQty} left <span className="text-sm">in Stocks</span>
               </p>
             )}
 
             {/* Quantity selector */}
-            <div className="mt-2 flex flex-col gap-8">
-              <div className="flex flex-row items-center space-x-4">
-                <div
-                  className={`p-2 md:p-4 bg-[#e6e6e6] rounded ${
-                    totalQty < 0
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }`}
-                  onClick={decreaseQtyHandler}
-                >
-                  <FaMinus className="cursor-pointer text-gray-500 text-xs" />
+            {!isSuccess && (
+              <div className="mt-2 flex flex-col gap-8">
+                <div className="flex flex-row items-center space-x-4">
+                  <div
+                    className={`p-2 md:p-4 bg-[#e6e6e6] rounded ${
+                      totalQty < 0
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }`}
+                    onClick={decreaseQtyHandler}
+                  >
+                    <FaMinus className="cursor-pointer text-gray-500 text-xs" />
+                  </div>
+                  <span className="font-bold text-gray-600 md:text-lg">
+                    {quantity}
+                  </span>
+                  <div
+                    className={`p-2 md:p-4 bg-[#e6e6e6] rounded ${
+                      totalQty < 0
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }`}
+                    onClick={increaseQtyHandler}
+                  >
+                    <FaPlus className="cursor-pointer text-gray-500 text-xs" />
+                  </div>
                 </div>
-                <span className="font-bold text-gray-600 md:text-lg">
-                  {quantity}
-                </span>
-                <div
-                  className={`p-2 md:p-4 bg-[#e6e6e6] rounded ${
-                    totalQty < 0
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }`}
-                  onClick={increaseQtyHandler}
-                >
-                  <FaPlus className="cursor-pointer text-gray-500 text-xs" />
-                </div>
-              </div>
 
-              {/* Add to cart button */}
-              {}
-              <button
-                className={`p-3 w-48 rounded ${
-                  isAddedToCart ? "bg-teal-500" : "bg-black"
-                } text-white hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out ${
-                  totalQty < 0 ? "cursor-not-allowed" : "cursor-pointer"
-                } text-sm md:text-base`}
-                onClick={handleAddToCart}
-                disabled={isAddedToCart || totalQty < 0}
+                {/* Add to cart button */}
+
+                <button
+                  className={`p-3 w-48 rounded ${
+                    isPending ? "bg-teal-500" : "bg-black"
+                  } text-white hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out ${
+                    totalQty < 0 ? "cursor-not-allowed" : "cursor-pointer"
+                  } text-sm md:text-base`}
+                  onClick={handleAddToCart}
+                  disabled={isPending || totalQty < 0}
+                >
+                  {isPending ? "Adding..." : "Add to cart"}
+                </button>
+              </div>
+            )}
+            {isSuccess && (
+              <Link
+                to="/cart"
+                className={`px-8 py-4 rounded  text-white bg-teal-500 hover:text-white text-sm md:text-base`}
               >
-                {isAddedToCart ? "Adding..." : "Add to cart"}
-              </button>
-            </div>
+                View Cart
+              </Link>
+            )}
           </div>
         </div>
 

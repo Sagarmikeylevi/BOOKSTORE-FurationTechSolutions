@@ -1,59 +1,36 @@
-import { lazy, Suspense } from "react";
-import { FaSpinner } from "react-icons/fa";
-import axios from "axios";
-const Cart = lazy(() => import("../components/Cart"));
-import { useEffect, useState } from "react";
-import { getAuthToken, getUser } from "../util/auth";
+import React, { Suspense } from "react";
+import { useQuery } from "@tanstack/react-query";
+const Cart = React.lazy(() => import("../components/Cart"));
+import { cartOrder, queryClient } from "../http";
+import LoaderSpinner from "../components/UI/Loader";
+import Error from "../components/UI/error/Error";
 
 const OrderCart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: cartItems,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["cartItems"],
+    queryFn: cartOrder,
+  });
 
-  useEffect(() => {
-    const getCartItems = async () => {
-      const token = getAuthToken();
-      const user = getUser();
-      try {
-        const response = await axios.get(
-          `https://bookstore-api12.onrender.com/api/cart/getBooks/${user}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        setCartItems(response.data.data.items);
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getCartItems();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <FaSpinner className="animate-spin mr-2" />
-        <p>Loading...</p>
-      </div>
-    );
+  if (isError) {
+    console.log(error);
+    return <Error message="Error fetching cart items" />;
   }
-
   return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-screen">
-          <FaSpinner className="animate-spin mr-2" />
-          <p>Loading...</p>
-        </div>
-      }
-    >
+    <Suspense fallback={<LoaderSpinner message="Loading cart items..." />}>
       <Cart items={cartItems} />
     </Suspense>
   );
 };
 
 export default OrderCart;
+
+export const Loader = () => {
+  return queryClient.fetchQuery({
+    queryKey: ["cartItems"],
+    queryFn: cartOrder,
+  });
+};

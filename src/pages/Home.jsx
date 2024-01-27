@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { FaSpinner } from "react-icons/fa";
-import useFetchData from "../hooks/useFetchData";
 
 const HeroSection = lazy(() => import("../components/HeroSection"));
 // Lazy-loaded components
@@ -17,22 +16,6 @@ const LoadingSpinner = () => (
 );
 
 const Home = () => {
-  const { data, isLoading, error } = useFetchData(
-    "https://bookstore-api12.onrender.com/api/book/getbooks"
-  );
-
-  // if (isLoading) {
-  //   return <LoadingSpinner />;
-  // }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  if (!data) {
-    return null;
-  }
-
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
@@ -41,7 +24,7 @@ const Home = () => {
 
       <Author />
       <BookGenres />
-      <FeaturedProduct books={data.data.books} />
+      <FeaturedProduct />
 
       <NewsletterSubscription />
     </>

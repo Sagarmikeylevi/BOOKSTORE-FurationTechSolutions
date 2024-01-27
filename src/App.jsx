@@ -3,14 +3,15 @@ import RootLayout from "./pages/Root";
 import Home from "./pages/Home";
 import Order from "./pages/Order";
 import BooksQuery from "./pages/BooksQuery";
-import OrderCart from "./pages/OrderCart";
+import OrderCart, { Loader as cartLoader } from "./pages/OrderCart";
 import ErrorPage from "./pages/ErrorPage";
 import RegisterPage, { action as registerAction } from "./pages/RegisterPage";
 import LoginPage, { action as loginAction } from "./pages/LoginPage";
 import { tokenLoader } from "./util/auth";
 import { checkAuthLoader } from "./util/auth";
 import Unauth from "./pages/Unauth";
-
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { queryClient } from "./http";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,8 +25,7 @@ const router = createBrowserRouter([
       { path: "login", element: <LoginPage />, action: loginAction },
       { path: "books", element: <BooksQuery /> },
       { path: "order/:bookID", element: <Order />, loader: checkAuthLoader },
-      { path: "cart", element: <OrderCart />, loader: checkAuthLoader },
-      
+      { path: "cart", element: <OrderCart />, loader: cartLoader },
     ],
   },
   {
@@ -35,7 +35,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

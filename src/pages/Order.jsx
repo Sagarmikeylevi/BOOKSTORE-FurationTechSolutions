@@ -1,44 +1,33 @@
-import { lazy, Suspense } from "react";
-import { FaSpinner } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-const BookOrder = lazy(() => import("../components/BookOrder"));
-import useFetchData from "../hooks/useFetchData";
+import BookOrder from "../components/BookOrder";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSpecificBook } from "../http";
+import LoaderSpinner from "../components/UI/Loader";
+import Error from "../components/UI/error/Error";
 
 const Order = () => {
   const { bookID } = useParams();
-  const { data, isLoading, error } = useFetchData(
-    `https://bookstore-api12.onrender.com/api/book/getbook/${bookID}`
-  );
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <FaSpinner className="animate-spin mr-2" />
-        <p>Loading...</p>
-      </div>
-    );
+  const {
+    data: book,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["books", { bookID: bookID }],
+    queryFn: () => fetchSpecificBook(bookID),
+  });
+
+  if (isPending) {
+    return <LoaderSpinner message="Fetching book details..." />;
   }
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
+  if (isError) {
+    console.log(error);
+    return <Error message="Error in fetching book" />;
   }
 
-  if (!data) {
-    return null;
-  }
-  
-  return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-screen">
-          <FaSpinner className="animate-spin mr-2" />
-          <p>Loading...</p>
-        </div>
-      }
-    >
-      <BookOrder book={data.data.book} />
-    </Suspense>
-  );
+  return <BookOrder book={book ? book : []} />;
 };
 
 export default Order;

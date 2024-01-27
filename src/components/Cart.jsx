@@ -7,44 +7,47 @@ import {
 } from "react-icons/fa";
 
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAuthToken, getUser } from "../util/auth";
 import CheckOutMessage from "./UI/success/CheckOutMessage";
+import { useMutation } from "@tanstack/react-query";
+import { deleteItem, queryClient, updateData } from "../http";
+import Error from "./UI/error/Error";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
-  const [deleting, setDeleting] = useState(false);
   const [checkingOut, setCheckingOut] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    setCartItems(items);
+  }, [items, setCartItems]);
+
+  const { mutate, isError, error } = useMutation({
+    mutationFn: ({ mode, id }) => updateData(mode, id),
+  });
+
+  const {
+    mutate: deleteMutate,
+    isPending: isDeleting,
+    isError: isDeleteError,
+    error: deleteError,
+  } = useMutation({
+    mutationFn: ({ id }) => deleteItem(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+    },
+  });
 
   let totalPrice = 0;
   const shipment = 20;
 
-  const updateData = async (mode, id) => {
-    try {
-      const token = getAuthToken();
-      await axios.put(
-        `https://bookstore-api12.onrender.com/api/cart/update/${id}`,
-        {
-          mode: mode,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const increaseQuantity = (itemId) => {
     const updatedItems = cartItems.map((item) => {
       if (item._id === itemId && item.totalQty > 0) {
         const newTotalQty = item.totalQty - 1;
         const newQty = item.Qty + 1;
-        updateData("plus", itemId);
+        mutate({ mode: "plus", id: itemId });
         return { ...item, totalQty: newTotalQty, Qty: newQty };
       }
       return item;
@@ -57,7 +60,7 @@ const Cart = ({ items }) => {
       if (item._id === itemId && item.Qty > 1) {
         const newTotalQty = item.totalQty + 1;
         const newQty = item.Qty - 1;
-        updateData("minus", itemId);
+        mutate({ mode: "minus", id: itemId });
         return { ...item, totalQty: newTotalQty, Qty: newQty };
       }
       return item;
@@ -65,28 +68,8 @@ const Cart = ({ items }) => {
     setCartItems(updatedItems);
   };
 
-  const deleteItemHandler = async (itemId) => {
-    try {
-      setDeleting(true);
-      const token = getAuthToken();
-      const user = getUser();
-      await axios.delete(
-        `https://bookstore-api12.onrender.com/api/cart/delete/${itemId}/${user}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-
-      const updatedItems = cartItems.filter((item) => item._id !== itemId);
-      setCartItems(updatedItems);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setDeleting(false);
-    }
+  const deleteItemHandler = (itemId) => {
+    deleteMutate({ id: itemId });
   };
 
   const checkOutHandler = async (itemId) => {
@@ -126,6 +109,16 @@ const Cart = ({ items }) => {
     return <CheckOutMessage />;
   }
 
+  if (isError) {
+    console.log(error);
+    return <Error message="Error in updating the items" />;
+  }
+
+  if (isDeleteError) {
+    console.log(deleteError);
+    return <Error message="Error in deleting the items" />;
+  }
+
   return (
     <div className="min-h-[100vh] h-auto pt-20 w-full">
       <div className="w-[90%] ml-[5%]  flex flex-row justify-between items-center">
@@ -149,7 +142,7 @@ const Cart = ({ items }) => {
       {cartItems.length > 0 && (
         <div className="mt-16 w-[90%] ml-[5%] mb-16 flex flex-col gap-16 justify-center items-center md:flex-row">
           {/* Cart Items */}
-          {deleting && (
+          {isDeleting && (
             <div className="flex items-center">
               <FaTrashAlt className="animate-spin mr-2" />
               <p className="text-gray-600">Deleting...</p>

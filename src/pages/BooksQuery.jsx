@@ -1,36 +1,26 @@
-import { lazy, Suspense } from "react";
-import { FaSpinner } from "react-icons/fa"; 
+import { useQuery } from "@tanstack/react-query";
+
 import { useLocation } from "react-router-dom";
-const ShowBooks = lazy(() => import("../components/ShowBooks") )
-import useFetchData from "../hooks/useFetchData";
+import { fetchBooks } from "../http";
+import LoaderSpinner from "../components/UI/Loader";
+import ShowBooks from "../components/ShowBooks";
 
 const BooksQuery = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
 
-  const { data, isLoading, error } = useFetchData(
-    "https://bookstore-api12.onrender.com/api/book/getbooks"
-  );
+  const {
+    data: books,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <FaSpinner className="animate-spin mr-2" />
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  let filteredBooks = data.data.books;
+  let filteredBooks = [];
   let pageName = "Books";
 
   const authors = [
@@ -51,33 +41,31 @@ const BooksQuery = () => {
   ];
 
   if (authors.includes(query)) {
-    filteredBooks = filteredBooks.filter((book) => book.author === query);
+    filteredBooks = books?.filter((book) => book.author === query);
     pageName = "Author";
   } else if (query === "All Books") {
-    filteredBooks = filteredBooks;
+    filteredBooks = books ? books : [];
     pageName = "Books";
   } else if (query === "Best Sellers") {
-    filteredBooks = filteredBooks.filter((book) => book.bestSeller === true);
+    filteredBooks = books?.filter((book) => book.bestSeller === true);
     pageName = "Best Sellers";
   } else if (genres.includes(query)) {
-    filteredBooks = filteredBooks.filter((book) => book.genres.includes(query));
+    filteredBooks = books?.filter((book) => book.genres.includes(query));
     pageName = query;
   } else {
     return <p>Error: "Are you serious right now bro ?"</p>;
   }
 
-  return (
-    <Suspense
-      fallback={
-        <div className="pt-24 flex justify-center items-center">
-          <FaSpinner className="animate-spin mr-2" />
-          <p>Loading...</p>
-        </div>
-      }
-    >
-      <ShowBooks books={filteredBooks} pageName={pageName} />
-    </Suspense>
-  );
+  if (isPending) {
+    return <LoaderSpinner message="Fetching books..." />;
+  }
+
+  if (isError) {
+    console.log(error);
+    return <Error message="Error feching books" />;
+  }
+
+  return <ShowBooks books={filteredBooks} pageName={pageName} />;
 };
 
 export default BooksQuery;
