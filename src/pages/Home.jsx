@@ -1,34 +1,33 @@
 import { lazy, Suspense } from "react";
-import { FaSpinner } from "react-icons/fa";
 
 const HeroSection = lazy(() => import("../components/HeroSection"));
-// Lazy-loaded components
 import Author from "../components/Author";
 import BookGenres from "../components/BookGenres";
-import FeaturedProduct from "../components/FeatutedBooks";
+import FeaturedBooks from "../components/FeatutedBooks";
 import NewsletterSubscription from "../components/NewsletterSubscription";
-
-const LoadingSpinner = () => (
-  <div className="flex justify-center items-center h-screen">
-    <FaSpinner className="animate-spin mr-2" />
-    <p>Loading...</p>
-  </div>
-);
+import LoaderSpinner from "../components/UI/Loader";
+import { fetchBooks, queryClient } from "../http";
 
 const Home = () => {
   return (
     <>
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={<LoaderSpinner message="Loading..." />}>
         <HeroSection />
       </Suspense>
 
       <Author />
       <BookGenres />
-      <FeaturedProduct />
-
+      <FeaturedBooks />
       <NewsletterSubscription />
     </>
   );
 };
 
 export default Home;
+
+export const Loader = () => {
+  return queryClient.fetchQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+};

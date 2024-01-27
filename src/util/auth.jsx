@@ -46,4 +46,6 @@ export const getUserName = () => {
   const name = localStorage.getItem("username");
 
   return name;
-}
+};
+
+export const apiUrl = "http://localhost:8000";

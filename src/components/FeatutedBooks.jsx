@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBooks } from "../http";
-import LoaderSpinner from "./UI/Loader";
 import Error from "./UI/error/Error";
 
-const FeaturedProduct = () => {
+const FeaturedBooks = () => {
   const {
     data: books,
-    isPending,
     isError,
     error,
   } = useQuery({
@@ -44,10 +42,6 @@ const FeaturedProduct = () => {
     setLeftClick(false);
     setRightClick(true);
   };
-
-  if (isPending) {
-    return <LoaderSpinner message="Fetching Books..." />;
-  }
 
   if (isError) {
     console.log(error);
@@ -116,4 +110,4 @@ const FeaturedProduct = () => {
   );
 };
 
-export default FeaturedProduct;
+export default FeaturedBooks;

@@ -1,16 +1,17 @@
+import React, { Suspense } from "react";
+const BookOrder = React.lazy(() => import("../components/BookOrder"));
 import { useParams } from "react-router-dom";
-import BookOrder from "../components/BookOrder";
 import { useQuery } from "@tanstack/react-query";
-import { fetchSpecificBook } from "../http";
+import { fetchSpecificBook, queryClient } from "../http";
 import LoaderSpinner from "../components/UI/Loader";
 import Error from "../components/UI/error/Error";
+import { getAuthToken } from "../util/auth";
 
 const Order = () => {
   const { bookID } = useParams();
 
   const {
     data: book,
-    isPending,
     isError,
     error,
   } = useQuery({
@@ -18,16 +19,27 @@ const Order = () => {
     queryFn: () => fetchSpecificBook(bookID),
   });
 
-  if (isPending) {
-    return <LoaderSpinner message="Fetching book details..." />;
-  }
-
   if (isError) {
     console.log(error);
     return <Error message="Error in fetching book" />;
   }
 
-  return <BookOrder book={book ? book : []} />;
+  return (
+    <Suspense fallback={<LoaderSpinner message="Loading book items..." />}>
+      <BookOrder book={book ? book : []} />
+    </Suspense>
+  );
 };
 
 export default Order;
+
+export const Loader = ({ params }) => {
+  const { bookID } = params;
+  const token = getAuthToken();
+  if (!token) return redirect("/unAuth");
+
+  return queryClient.fetchQuery({
+    queryKey: ["books", { bookID: bookID }],
+    queryFn: () => fetchSpecificBook(bookID),
+  });
+};

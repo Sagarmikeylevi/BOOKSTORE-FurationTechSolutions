@@ -34,7 +34,7 @@ const BookOrder = ({ book }) => {
 
   if (isError) {
     console.log(error);
-    return <Error message="Add to cart error" />;
+    return <Error message={error.response?.data || "Add to cart error"} />;
   }
 
   return (
@@ -70,7 +70,7 @@ const BookOrder = ({ book }) => {
             </p>
 
             {/* Stock availability */}
-            {totalQty < 0 && (
+            {totalQty <= 0 && (
               <p
                 className={`mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-red-600 ${
                   isSuccess ? "mb-8" : ""
@@ -79,7 +79,7 @@ const BookOrder = ({ book }) => {
                 Out of Stocks
               </p>
             )}
-            {totalQty >= 0 && (
+            {totalQty > 0 && (
               <p
                 className={`mt-2 md:mt-4 text-sm md:text-base lg:text-lg font-semibold text-gray-500 ${
                   isSuccess ? "mb-8" : ""

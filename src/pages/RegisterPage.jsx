@@ -1,6 +1,7 @@
 import axios from "axios";
 import { redirect } from "react-router-dom";
 import Register from "../components/Register";
+import { apiUrl } from "../util/auth";
 
 const RegisterPage = () => {
   return <Register />;
@@ -18,10 +19,7 @@ export const action = async ({ request }) => {
       password: data.get("password"),
     };
 
-    await axios.post(
-      "https://bookstore-api12.onrender.com/api/user/register",
-      userData
-    );
+    await axios.post(`${apiUrl}/api/user/register`, userData);
 
     return redirect("/login");
   } catch (error) {

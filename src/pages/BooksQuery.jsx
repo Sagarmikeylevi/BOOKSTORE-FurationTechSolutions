@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { useLocation } from "react-router-dom";
 import { fetchBooks } from "../http";
 import LoaderSpinner from "../components/UI/Loader";

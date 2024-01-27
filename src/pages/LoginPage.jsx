@@ -1,6 +1,7 @@
 import axios from "axios";
 import Login from "../components/Login";
 import { redirect } from "react-router-dom";
+import { apiUrl } from "../util/auth";
 
 const LoginPage = () => {
   return <Login />;
@@ -17,10 +18,7 @@ export const action = async ({ request }) => {
       password: data.get("password"),
     };
 
-    const response = await axios.post(
-      "https://bookstore-api12.onrender.com/api/user/login",
-      loginData
-    );
+    const response = await axios.post(`${apiUrl}/api/user/login`, loginData);
 
     const token = response.data.data.token;
     const userId = response.data.data.userId;

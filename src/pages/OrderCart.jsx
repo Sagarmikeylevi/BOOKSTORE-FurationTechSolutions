@@ -1,9 +1,11 @@
 import React, { Suspense } from "react";
-import { useQuery } from "@tanstack/react-query";
 const Cart = React.lazy(() => import("../components/Cart"));
+import { useQuery } from "@tanstack/react-query";
 import { cartOrder, queryClient } from "../http";
 import LoaderSpinner from "../components/UI/Loader";
 import Error from "../components/UI/error/Error";
+import { getAuthToken } from "../util/auth";
+import { redirect } from "react-router-dom";
 
 const OrderCart = () => {
   const {
@@ -29,6 +31,9 @@ const OrderCart = () => {
 export default OrderCart;
 
 export const Loader = () => {
+  const token = getAuthToken();
+  if (!token) return redirect("/unAuth");
+
   return queryClient.fetchQuery({
     queryKey: ["cartItems"],
     queryFn: cartOrder,

@@ -6,26 +6,47 @@ import {
   FaTrashAlt,
 } from "react-icons/fa";
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { getAuthToken, getUser } from "../util/auth";
+import { useState } from "react";
 import CheckOutMessage from "./UI/success/CheckOutMessage";
 import { useMutation } from "@tanstack/react-query";
-import { deleteItem, queryClient, updateData } from "../http";
+import { checkOut, deleteItem, queryClient, updateData } from "../http";
 import Error from "./UI/error/Error";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
-  const [checkingOut, setCheckingOut] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  useEffect(() => {
-    setCartItems(items);
-  }, [items, setCartItems]);
 
   const { mutate, isError, error } = useMutation({
     mutationFn: ({ mode, id }) => updateData(mode, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+    },
   });
+
+  const increaseQuantity = (itemId) => {
+    const updatedItems = cartItems.map((item) => {
+      if (item._id === itemId && item.totalQty > 0) {
+        mutate({ mode: "plus", id: itemId });
+        const newTotalQty = item.totalQty - 1;
+        const newQty = item.Qty + 1;
+        return { ...item, totalQty: newTotalQty, Qty: newQty };
+      }
+      return item;
+    });
+    setCartItems(updatedItems);
+  };
+
+  const decreaseQuantity = (itemId) => {
+    const updatedItems = cartItems.map((item) => {
+      if (item._id === itemId && item.Qty > 1) {
+        mutate({ mode: "minus", id: itemId });
+        const newTotalQty = item.totalQty + 1;
+        const newQty = item.Qty - 1;
+        return { ...item, totalQty: newTotalQty, Qty: newQty };
+      }
+      return item;
+    });
+    setCartItems(updatedItems);
+  };
 
   const {
     mutate: deleteMutate,
@@ -39,62 +60,30 @@ const Cart = ({ items }) => {
     },
   });
 
-  let totalPrice = 0;
-  const shipment = 20;
-
-  const increaseQuantity = (itemId) => {
-    const updatedItems = cartItems.map((item) => {
-      if (item._id === itemId && item.totalQty > 0) {
-        const newTotalQty = item.totalQty - 1;
-        const newQty = item.Qty + 1;
-        mutate({ mode: "plus", id: itemId });
-        return { ...item, totalQty: newTotalQty, Qty: newQty };
-      }
-      return item;
-    });
-    setCartItems(updatedItems);
-  };
-
-  const decreaseQuantity = (itemId) => {
-    const updatedItems = cartItems.map((item) => {
-      if (item._id === itemId && item.Qty > 1) {
-        const newTotalQty = item.totalQty + 1;
-        const newQty = item.Qty - 1;
-        mutate({ mode: "minus", id: itemId });
-        return { ...item, totalQty: newTotalQty, Qty: newQty };
-      }
-      return item;
-    });
-    setCartItems(updatedItems);
-  };
-
   const deleteItemHandler = (itemId) => {
     deleteMutate({ id: itemId });
+    setTimeout(() => {
+      const updatedItems = cartItems.filter((item) => item._id !== itemId);
+      setCartItems(updatedItems);
+    }, 2000);
   };
 
-  const checkOutHandler = async (itemId) => {
-    try {
-      setCheckingOut(true);
-      const token = getAuthToken();
-      const user = getUser();
-      const response = await axios.delete(
-        `https://bookstore-api12.onrender.com/api/cart/checkout/${user}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+  const {
+    mutate: checkoutMutate,
+    isPending: isCheckoutPending,
+    isError: isCheckoutError,
+    error: checkoutError,
+    isSuccess: isCheckoutSuccess,
+  } = useMutation({
+    mutationFn: checkOut,
+  });
 
-      setCartItems([]);
-      setIsSuccess(true);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setCheckingOut(false);
-    }
+  const checkOutHandler = async () => {
+    checkoutMutate();
   };
+
+  let totalPrice = 0;
+  const shipment = 20;
 
   // Calculate the total price
   if (cartItems !== null) {
@@ -105,7 +94,7 @@ const Cart = ({ items }) => {
 
   let discount = Math.round(totalPrice * 0.05);
 
-  if (isSuccess) {
+  if (isCheckoutSuccess) {
     return <CheckOutMessage />;
   }
 
@@ -117,6 +106,11 @@ const Cart = ({ items }) => {
   if (isDeleteError) {
     console.log(deleteError);
     return <Error message="Error in deleting the items" />;
+  }
+
+  if (isCheckoutError) {
+    console.log(checkoutError);
+    return <Error message="Error in checkout" />;
   }
 
   return (
@@ -237,13 +231,13 @@ const Cart = ({ items }) => {
 
             <button
               className={`mt-6  ${
-                checkingOut ? "bg-teal-500" : "bg-black"
+                isCheckoutPending ? "bg-teal-500" : "bg-black"
               } text-gray-200 p-2 pl-6 pr-6 rounded hover:bg-teal-500 hover:text-white transition duration-300 ease-in-out cursor-pointer text-sm md:text-base`}
               onClick={checkOutHandler}
               type="submit"
-              disabled={checkingOut}
+              disabled={isCheckoutPending}
             >
-              {checkingOut ? "Checking out..." : "Checkout now"}
+              {isCheckoutPending ? "Checking out..." : "Checkout now"}
             </button>
           </div>
         </div>
