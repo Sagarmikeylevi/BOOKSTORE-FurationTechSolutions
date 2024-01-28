@@ -4,10 +4,12 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBooks } from "../http";
 import Error from "./UI/error/Error";
+import LoaderSpinner from "./UI/Loader";
 
 const FeaturedBooks = () => {
   const {
     data: books,
+    isPending,
     isError,
     error,
   } = useQuery({
@@ -43,6 +45,10 @@ const FeaturedBooks = () => {
     setRightClick(true);
   };
 
+  if (isPending) {
+    return <LoaderSpinner message="Feching book..." />;
+  }
+
   if (isError) {
     console.log(error);
     return <Error message="Error Fetching Books" />;
@@ -54,7 +60,7 @@ const FeaturedBooks = () => {
       className="p-4 mb-16 flex flex-col justify-center items-center"
     >
       <h1 className="text-2xl font-semibold sm:text-3xl md:text-4xl mb-12 relative z-40">
-        Featured Products
+        Featured Books
         <span className="absolute left-[38%] right-0 bottom-[-1rem] w-[25%] h-1 bg-gray-400 rounded"></span>
       </h1>
 

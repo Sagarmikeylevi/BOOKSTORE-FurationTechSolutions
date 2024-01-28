@@ -27,7 +27,7 @@ export const fetchSpecificBook = async (bookID) => {
   }
 };
 
-export const postOrder = async (orderDetails) => {
+export const postOrder = async (orderDetails, user) => {
   try {
     await axios.post(`${apiUrl}/api/cart/addBooks/${user}`, orderDetails, {
       headers: {

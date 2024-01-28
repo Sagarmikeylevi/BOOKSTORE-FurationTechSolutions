@@ -1,8 +1,9 @@
+import React, { Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { fetchBooks } from "../http";
 import LoaderSpinner from "../components/UI/Loader";
-import ShowBooks from "../components/ShowBooks";
+const ShowBooks = React.lazy(() => import("../components/ShowBooks"));
 
 const BooksQuery = () => {
   const location = useLocation();
@@ -64,7 +65,11 @@ const BooksQuery = () => {
     return <Error message="Error feching books" />;
   }
 
-  return <ShowBooks books={filteredBooks} pageName={pageName} />;
+  return (
+    <Suspense fallback={<LoaderSpinner message="Loading books..." />}>
+      <ShowBooks books={filteredBooks} pageName={pageName} />
+    </Suspense>
+  );
 };
 
 export default BooksQuery;

@@ -4,7 +4,7 @@ import { useRouteError } from "react-router-dom";
 // ErrorPage component
 const ErrorPage = () => {
   const error = useRouteError(); // Retrieves error information from the route
-
+  console.log(error);
   let title = "An error occurred!";
   let message = "Something went wrong!";
 

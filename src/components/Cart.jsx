@@ -11,9 +11,11 @@ import CheckOutMessage from "./UI/success/CheckOutMessage";
 import { useMutation } from "@tanstack/react-query";
 import { checkOut, deleteItem, queryClient, updateData } from "../http";
 import Error from "./UI/error/Error";
+import { getUser } from "../util/auth";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
+  const user = getUser();
 
   const { mutate, isError, error } = useMutation({
     mutationFn: ({ mode, id }) => updateData(mode, id),
@@ -28,7 +30,13 @@ const Cart = ({ items }) => {
         mutate({ mode: "plus", id: itemId });
         const newTotalQty = item.totalQty - 1;
         const newQty = item.Qty + 1;
-        return { ...item, totalQty: newTotalQty, Qty: newQty };
+        const newTotalPrice = newQty * item.price;
+        return {
+          ...item,
+          totalQty: newTotalQty,
+          Qty: newQty,
+          totalPrice: newTotalPrice,
+        };
       }
       return item;
     });
@@ -41,7 +49,13 @@ const Cart = ({ items }) => {
         mutate({ mode: "minus", id: itemId });
         const newTotalQty = item.totalQty + 1;
         const newQty = item.Qty - 1;
-        return { ...item, totalQty: newTotalQty, Qty: newQty };
+        const newTotalPrice = newQty * item.price;
+        return {
+          ...item,
+          totalQty: newTotalQty,
+          Qty: newQty,
+          totalPrice: newTotalPrice,
+        };
       }
       return item;
     });
@@ -69,6 +83,7 @@ const Cart = ({ items }) => {
   };
 
   const {
+    data: result,
     mutate: checkoutMutate,
     isPending: isCheckoutPending,
     isError: isCheckoutError,

@@ -1,5 +1,3 @@
-import { redirect } from "react-router-dom";
-
 export const getTokenDuration = () => {
   const storedExpirationDate = localStorage.getItem("expiration");
   const expirationDate = new Date(storedExpirationDate);
@@ -29,15 +27,6 @@ export const tokenLoader = () => {
   return token;
 };
 
-export const checkAuthLoader = () => {
-  const token = getAuthToken();
-
-  if (!token) {
-    return redirect("/unAuth");
-  }
-  return null;
-};
-
 export const getUser = () => {
   const user = localStorage.getItem("user");
   return user;
@@ -48,4 +37,4 @@ export const getUserName = () => {
   return name;
 };
 
-export const apiUrl = "http://localhost:8000";
+export const apiUrl = "https://bookstore-api12.onrender.com";

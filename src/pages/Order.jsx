@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 const BookOrder = React.lazy(() => import("../components/BookOrder"));
-import { useParams } from "react-router-dom";
+import { redirect, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSpecificBook, queryClient } from "../http";
 import LoaderSpinner from "../components/UI/Loader";
@@ -34,9 +34,9 @@ const Order = () => {
 export default Order;
 
 export const Loader = ({ params }) => {
-  const { bookID } = params;
   const token = getAuthToken();
   if (!token) return redirect("/unAuth");
+  const { bookID } = params;
 
   return queryClient.fetchQuery({
     queryKey: ["books", { bookID: bookID }],
