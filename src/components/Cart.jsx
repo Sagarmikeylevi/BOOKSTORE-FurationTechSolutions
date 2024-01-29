@@ -11,14 +11,15 @@ import CheckOutMessage from "./UI/success/CheckOutMessage";
 import { useMutation } from "@tanstack/react-query";
 import { checkOut, deleteItem, queryClient, updateData } from "../http";
 import Error from "./UI/error/Error";
-import { getUser } from "../util/auth";
+import { getAuthToken, getUser } from "../util/auth";
 
 const Cart = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
   const user = getUser();
+  const token = getAuthToken();
 
   const { mutate, isError, error } = useMutation({
-    mutationFn: ({ mode, id }) => updateData(mode, id),
+    mutationFn: ({ mode, id, token }) => updateData(mode, id, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartItems"] });
     },
@@ -27,7 +28,7 @@ const Cart = ({ items }) => {
   const increaseQuantity = (itemId) => {
     const updatedItems = cartItems.map((item) => {
       if (item._id === itemId && item.totalQty > 0) {
-        mutate({ mode: "plus", id: itemId });
+        mutate({ mode: "plus", id: itemId, token: token });
         const newTotalQty = item.totalQty - 1;
         const newQty = item.Qty + 1;
         const newTotalPrice = newQty * item.price;
@@ -46,7 +47,7 @@ const Cart = ({ items }) => {
   const decreaseQuantity = (itemId) => {
     const updatedItems = cartItems.map((item) => {
       if (item._id === itemId && item.Qty > 1) {
-        mutate({ mode: "minus", id: itemId });
+        mutate({ mode: "minus", id: itemId, token: token });
         const newTotalQty = item.totalQty + 1;
         const newQty = item.Qty - 1;
         const newTotalPrice = newQty * item.price;
@@ -68,14 +69,14 @@ const Cart = ({ items }) => {
     isError: isDeleteError,
     error: deleteError,
   } = useMutation({
-    mutationFn: ({ id }) => deleteItem(id),
+    mutationFn: ({ id, user, token }) => deleteItem(id, user, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartItems"] });
     },
   });
 
   const deleteItemHandler = (itemId) => {
-    deleteMutate({ id: itemId });
+    deleteMutate({ id: itemId, user: user, token: token });
     setTimeout(() => {
       const updatedItems = cartItems.filter((item) => item._id !== itemId);
       setCartItems(updatedItems);
@@ -90,11 +91,11 @@ const Cart = ({ items }) => {
     error: checkoutError,
     isSuccess: isCheckoutSuccess,
   } = useMutation({
-    mutationFn: checkOut,
+    mutationFn: ({ user, token }) => checkOut(user, token),
   });
 
   const checkOutHandler = async () => {
-    checkoutMutate();
+    checkoutMutate({ user: user, token: token });
   };
 
   let totalPrice = 0;

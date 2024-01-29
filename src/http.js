@@ -1,8 +1,6 @@
 import axios from "axios";
 import { QueryClient } from "@tanstack/react-query";
-import { apiUrl, getAuthToken, getUser } from "./util/auth";
-const token = getAuthToken();
-const user = getUser();
+import { apiUrl } from "./util/auth";
 
 export const queryClient = new QueryClient();
 
@@ -27,7 +25,6 @@ export const fetchSpecificBook = async (bookID) => {
 };
 
 export const postOrder = async (orderDetails, user, token) => {
-  console.log(token);
   try {
     await axios.post(`${apiUrl}/api/cart/addBooks/${user}`, orderDetails, {
       headers: {
@@ -55,7 +52,7 @@ export const cartOrder = async (user, token) => {
   }
 };
 
-export const updateData = async (mode, id) => {
+export const updateData = async (mode, id, token) => {
   try {
     await axios.put(
       `${apiUrl}/api/cart/update/${id}`,
@@ -74,7 +71,7 @@ export const updateData = async (mode, id) => {
   }
 };
 
-export const deleteItem = async (id) => {
+export const deleteItem = async (id, user, token) => {
   try {
     await axios.delete(`${apiUrl}/api/cart/delete/${id}/${user}`, {
       headers: {
@@ -87,7 +84,7 @@ export const deleteItem = async (id) => {
   }
 };
 
-export const checkOut = async () => {
+export const checkOut = async (user, token) => {
   try {
     await axios.delete(`${apiUrl}/api/cart/checkout/${user}`, {
       headers: {
