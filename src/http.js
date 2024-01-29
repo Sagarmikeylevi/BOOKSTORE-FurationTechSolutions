@@ -1,7 +1,6 @@
 import axios from "axios";
-import { getAuthToken, getUser } from "./util/auth";
 import { QueryClient } from "@tanstack/react-query";
-import { apiUrl } from "./util/auth";
+import { apiUrl, getAuthToken, getUser } from "./util/auth";
 const token = getAuthToken();
 const user = getUser();
 
@@ -27,7 +26,8 @@ export const fetchSpecificBook = async (bookID) => {
   }
 };
 
-export const postOrder = async (orderDetails, user) => {
+export const postOrder = async (orderDetails, user, token) => {
+  console.log(token);
   try {
     await axios.post(`${apiUrl}/api/cart/addBooks/${user}`, orderDetails, {
       headers: {
@@ -40,7 +40,7 @@ export const postOrder = async (orderDetails, user) => {
   }
 };
 
-export const cartOrder = async () => {
+export const cartOrder = async (user, token) => {
   try {
     const response = await axios.get(`${apiUrl}/api/cart/getBooks/${user}`, {
       headers: {

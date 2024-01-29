@@ -4,14 +4,15 @@ import { useMutation } from "@tanstack/react-query";
 import { postOrder, queryClient } from "../http";
 import Error from "./UI/error/Error";
 import { Link } from "react-router-dom";
-import { getUser } from "../util/auth";
+import { getAuthToken, getUser } from "../util/auth";
 
 const BookOrder = ({ book }) => {
   const [totalQty, setTotalQty] = useState(book.totalQty - 1);
   const [quantity, setQuantity] = useState(1);
 
   const { mutate, isPending, isError, error, isSuccess } = useMutation({
-    mutationFn: ({ orderDetails, user }) => postOrder(orderDetails, user),
+    mutationFn: ({ orderDetails, user, token }) =>
+      postOrder(orderDetails, user, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartItems"] });
     },
@@ -19,7 +20,12 @@ const BookOrder = ({ book }) => {
 
   const handleAddToCart = () => {
     const user = getUser();
-    mutate({ orderDetails: { bookId: book._id, qty: quantity }, user: user });
+    const token = getAuthToken();
+    mutate({
+      orderDetails: { bookId: book._id, qty: quantity },
+      user: user,
+      token: token,
+    });
   };
 
   const decreaseQtyHandler = () => {

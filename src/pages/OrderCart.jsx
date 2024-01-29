@@ -5,16 +5,18 @@ import { useQuery } from "@tanstack/react-query";
 import { cartOrder, queryClient } from "../http";
 import LoaderSpinner from "../components/UI/Loader";
 import Error from "../components/UI/error/Error";
-import { getAuthToken } from "../util/auth";
+import { getAuthToken, getUser } from "../util/auth";
 
 const OrderCart = () => {
+  const token = getAuthToken();
+  const user = getUser();
   const {
     data: cartItems,
     isError,
     error,
   } = useQuery({
     queryKey: ["cartItems"],
-    queryFn: cartOrder,
+    queryFn: () => cartOrder(user, token),
   });
 
   if (isError) {
@@ -33,11 +35,11 @@ export default OrderCart;
 
 export const Loader = () => {
   const token = getAuthToken();
-  console.log(token);
+  const user = getUser();
   if (!token) return redirect("/unAuth");
 
   return queryClient.fetchQuery({
     queryKey: ["cartItems"],
-    queryFn: cartOrder,
+    queryFn: () => cartOrder(user, token),
   });
 };

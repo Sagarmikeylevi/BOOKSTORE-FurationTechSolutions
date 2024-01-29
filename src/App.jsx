@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/Root";
 import Home from "./pages/Home";
 import Order, { Loader as orderLoader } from "./pages/Order";
-import BooksQuery from "./pages/BooksQuery";
+import BooksQuery, { Loader as bookLoader } from "./pages/BooksQuery";
 import OrderCart, { Loader as cartLoader } from "./pages/OrderCart";
 import ErrorPage from "./pages/ErrorPage";
 import RegisterPage, { action as registerAction } from "./pages/RegisterPage";
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "register", element: <RegisterPage />, action: registerAction },
       { path: "login", element: <LoginPage />, action: loginAction },
-      { path: "books", element: <BooksQuery /> },
+      { path: "books", element: <BooksQuery />, loader: bookLoader },
       { path: "order/:bookID", element: <Order />, loader: orderLoader },
       { path: "cart", element: <OrderCart />, loader: cartLoader },
     ],

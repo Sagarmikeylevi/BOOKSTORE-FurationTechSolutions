@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
-import { fetchBooks } from "../http";
+import { fetchBooks, queryClient } from "../http";
 import LoaderSpinner from "../components/UI/Loader";
 const ShowBooks = React.lazy(() => import("../components/ShowBooks"));
 
@@ -12,7 +12,6 @@ const BooksQuery = () => {
 
   const {
     data: books,
-    isPending,
     isError,
     error,
   } = useQuery({
@@ -56,10 +55,6 @@ const BooksQuery = () => {
     return <p>Error: "Are you serious right now bro ?"</p>;
   }
 
-  if (isPending) {
-    return <LoaderSpinner message="Fetching books..." />;
-  }
-
   if (isError) {
     console.log(error);
     return <Error message="Error feching books" />;
@@ -73,3 +68,10 @@ const BooksQuery = () => {
 };
 
 export default BooksQuery;
+
+export const Loader = async () => {
+  return queryClient.fetchQuery({
+    queryKey: ["books"],
+    queryFn: fetchBooks,
+  });
+};
