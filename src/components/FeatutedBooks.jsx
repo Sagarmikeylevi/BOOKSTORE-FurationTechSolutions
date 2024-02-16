@@ -6,17 +6,7 @@ import { fetchBooks } from "../http";
 import Error from "./UI/error/Error";
 import LoaderSpinner from "./UI/Loader";
 
-const FeaturedBooks = () => {
-  const {
-    data: books,
-    isPending,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["books"],
-    queryFn: fetchBooks,
-  });
-
+const FeaturedBooks = ({ books }) => {
   const featuredBooks = books?.filter((book) => book.featured === true) || [];
 
   const containerRef = useRef(null);
@@ -44,15 +34,6 @@ const FeaturedBooks = () => {
     setLeftClick(false);
     setRightClick(true);
   };
-
-  if (isPending) {
-    return <LoaderSpinner message="Feching book..." />;
-  }
-
-  if (isError) {
-    console.log(error);
-    return <Error message="Error Fetching Books" />;
-  }
 
   return (
     <div
