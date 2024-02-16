@@ -1,6 +1,4 @@
-import { lazy, Suspense } from "react";
-
-const HeroSection = lazy(() => import("../components/HeroSection"));
+import HeroSection from "../components/HeroSection";
 import Author from "../components/Author";
 import BookGenres from "../components/BookGenres";
 import FeaturedBooks from "../components/FeatutedBooks";
@@ -31,13 +29,11 @@ const Home = () => {
   }
   return (
     <>
-      <Suspense fallback={<LoaderSpinner message="Loading..." />}>
-        <HeroSection />
-        <Author />
-        <BookGenres />
-        <FeaturedBooks books={books} />
-        <NewsletterSubscription />
-      </Suspense>
+      <HeroSection />
+      <Author />
+      <BookGenres />
+      <FeaturedBooks books={books} />
+      <NewsletterSubscription />
     </>
   );
 };
