@@ -20,7 +20,7 @@ const Home = () => {
   });
 
   if (isPending) {
-    <LoaderSpinner message="Fetching Books..." />;
+    return <LoaderSpinner message="Fetching Books..." />;
   }
 
   if (isError) {
